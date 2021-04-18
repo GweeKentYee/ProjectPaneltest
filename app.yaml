@@ -14,8 +14,8 @@ env_variables:
   APP_DEBUG: true
   APP_KEY: base64:3EOFvWjr727S0mFtltBYfjtwnRZplJISSLNA9spSaOM=
   STORAGE_DIR: /tmp
-  CACHE_DRIVER: file
-  SESSION_DRIVER: file
+  CACHE_DRIVER: database
+  SESSION_DRIVER: database
   DB_CONNECTION: mysql
   DB_HOST: 127.0.0.1
   DB_PORT: 3306
