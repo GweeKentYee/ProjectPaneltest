@@ -52,6 +52,7 @@
             "@php artisan key:generate --ansi"
         ],
         "post-deploy-cmd": [
+            "php artisan cache:clear",
             "php artisan storage:link",
             "php artisan passport:install",
             "chmod -R 755 bootstrap\/cache"
