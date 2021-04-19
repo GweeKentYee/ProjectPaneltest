@@ -55,7 +55,9 @@
             "php artisan cache:clear",
             "php artisan storage:link",
             "php artisan passport:install",
-            "chmod -R 755 bootstrap\/cache"
+            "chmod -R 755 bootstrap\/cache",
+            "chmod -Rf 775 /public",
+            "chmod -Rf 775 /storage"
         ]
     },
     "extra": {
