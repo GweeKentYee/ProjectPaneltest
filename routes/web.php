@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,8 @@ Route::get('/', 'App\Http\Controllers\Auth\LoginController@showLoginForm');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/servermonitor', 'App\Http\Controllers\ServerMonitorController@disk_total');
 
-
 Auth::routes(['register' => false]);
-// Auth::routes();
+Auth::routes();
 
 Route::post('/game/add', 'App\Http\Controllers\GamesController@add');
 Route::delete('/game/remove','App\Http\Controllers\GamesController@remove');
