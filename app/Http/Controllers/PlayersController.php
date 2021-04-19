@@ -7,7 +7,7 @@ use App\Models\players;
 use App\Models\player_files;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\support\Facades\File;
+use Illuminate\Support\Facades\File;
 
 class PlayersController extends Controller
 {
@@ -155,7 +155,7 @@ class PlayersController extends Controller
 
         $path = public_path('storage/uploads/'.$directory);
         
-        file::deleteDirectory($path);
+        File::deleteDirectory($path);
 
         Players::where('id', $data['player_id'])->delete();
         
@@ -233,7 +233,7 @@ class PlayersController extends Controller
 
         $path = public_path('storage/uploads/'.$directory);
         
-        file::deleteDirectory($path);
+        File::deleteDirectory($path);
 
         Players::where('id', $id)->delete();
         
@@ -282,7 +282,7 @@ class PlayersController extends Controller
 
         $path = public_path('storage/uploads/'.$directory);
         
-        file::deleteDirectory($path);
+        File::deleteDirectory($path);
 
         Players::where('id', $id)->delete();
         

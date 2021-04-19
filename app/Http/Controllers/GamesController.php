@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\games;
 use Illuminate\Http\Request;
-use Illuminate\support\Facades\File;
+use Illuminate\Support\Facades\File;
 
 class GamesController extends Controller
 {
@@ -96,7 +96,7 @@ class GamesController extends Controller
         $game = games::find($data['games_id']);
 
         $path = public_path('storage/uploads/'.$game->game_name);
-        file::deleteDirectory($path);
+        File::deleteDirectory($path);
 
         Games::destroy($data);
 
@@ -128,7 +128,7 @@ class GamesController extends Controller
 
             $gamename = $game->game_name;
             $path = public_path('storage/uploads/'.$gamename);
-            file::deleteDirectory($path);
+            File::deleteDirectory($path);
         }
 
         foreach ($checkedvalue as $checkedvalue){
