@@ -19,7 +19,7 @@ Route::get('/', 'App\Http\Controllers\Auth\LoginController@showLoginForm');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/servermonitor', 'App\Http\Controllers\ServerMonitorController@disk_total');
 
-Auth::routes(['register' => false]);
+// Auth::routes(['register' => false]);
 Auth::routes();
 
 Route::post('/game/add', 'App\Http\Controllers\GamesController@add');
