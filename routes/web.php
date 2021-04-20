@@ -20,7 +20,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/servermonitor', 'App\Http\Controllers\ServerMonitorController@disk_total');
 
 Auth::routes(['register' => false]);
-Auth::routes();
+// Auth::routes();
 
 Route::post('/game/add', 'App\Http\Controllers\GamesController@add');
 Route::delete('/game/remove','App\Http\Controllers\GamesController@remove');
