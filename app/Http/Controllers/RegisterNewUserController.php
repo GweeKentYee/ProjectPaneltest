@@ -14,8 +14,16 @@ class RegisterNewUserController extends Controller
 {
     //
 
+    public function registerPage(){
+
+        return view('/RegisterNewUser');
+
+    }
+
     public function register(){
 
+        //Register new user 
+        
         $data = request()->validate([
             'username' => ['required', 'string', 'max:255'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
