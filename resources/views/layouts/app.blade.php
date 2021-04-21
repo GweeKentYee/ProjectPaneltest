@@ -61,7 +61,7 @@
                                     </a>
 
                                     @if (Route::has('register'))
-                                        <a class="dropdown-item" href="/registernew">
+                                        <a class="dropdown-item" href="/register">
                                             {{ __('Register New User') }}
                                         </a>
                                     @endif

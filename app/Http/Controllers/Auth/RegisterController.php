@@ -38,9 +38,11 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
-    }
+        //Prevent access without authentication
 
+        $this->middleware('auth');
+
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -55,7 +57,6 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
