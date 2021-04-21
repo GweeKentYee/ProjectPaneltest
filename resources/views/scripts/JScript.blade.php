@@ -16,6 +16,18 @@
 
 @endif
 
+@if(Session::has('message'))
+    <script>
+        var type = "{{Session::get('alert-type', 'info')}}";
+
+        switch(type){
+            case 'success':
+                toastr.success("{{Session::get('message')}}");
+                break;
+        }
+    </script>
+@endif
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#remove').click(function() {

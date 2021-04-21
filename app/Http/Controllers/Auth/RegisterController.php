@@ -82,12 +82,20 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        User::create([
+        if (User::create([
         'username' => $data['username'],
         // 'email' => $data['email'],
         'password' => Hash::make($data['password']),
-        ]);
+        ])) {
+            
+            $notification = array(
+                'message' => 'Account registered successfully!',
+                'alert-type' => 'success'
+            );
 
-        return redirect('/home');
+            return redirect('/home')->with($notification);
+
+        }
+
     }
 }
