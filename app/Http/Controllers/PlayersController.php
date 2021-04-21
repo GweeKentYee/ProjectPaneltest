@@ -11,59 +11,53 @@ use Illuminate\Support\Facades\File;
 
 class PlayersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function __construct()
     {
+        //Prevent access without authentication
+
         $this->middleware('auth');
     }
     
     public function index()
     {
-        //
+        //Show all players (API)
+
         $players = players::all();
+
         if ($players->isEmpty()){
             
             $response = ['message' =>  'No player avaliable.'];
             return response($response, 200);
             
         } else {
+
             return $players;
+
         }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        //Create a player (API)
+
         $data = request()->validate([
             'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$request['games_id']],
             'games_id' => ['required','exists:games,id']   
         ]);
+
         return players::create([
             "player_name" => $data["player_name"],
             "games_id" => $data["games_id"],
         ]);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\players  $players
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request)
     {
-        //
+        //Show players according to game ID (API)
+
         $data = $request->validate([
             'games_id' => ['required','exists:games,id']   
         ]);
@@ -78,66 +72,16 @@ class PlayersController extends Controller
             return response($response, 200);
             
         } else {
+
             return $players;
+
         }
     
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\players  $players
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, players $players)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\players  $players
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(request $request)
     {
-        
-        // $data = $request->validate([
-        //     'player_id' => ['required', 'exists:players,id']  
-        // ]);
-        
-        // $id = $data['player_id'];
-
-        // $fileinfo = player_files::select("JSON_file")->where("players_id", $id)->get();
-
-        // if($fileinfo->isEmpty()){
-        //     Players::where('id', $id)->delete();
-        //     $response = ['message' => 'Player deleted successfully.'];
-        //     return response($response, 200); 
-        // } else {
-        //     foreach ($fileinfo as $fileinfo){
-        //         $file = $fileinfo->JSON_file;
-        //         $filepath[] = str_replace('\\','/',public_path($file));
-        //     }
-
-        //     foreach ($filepath as $filepath){
-        //         if(file_exists($filepath)){
-        //             unlink($filepath);    
-        //         }
-                 
-        //         else{
-        //             Players::where('id', $id)->delete();
-        //             $response = ['message' => 'Player deleted successfully.'];
-        //             return response($response, 200); 
-        //         }
-        //     } 
-        //     Players::where('id', $id)->delete();
-        //     $response = ['message' => 'Player deleted successfully.'];
-        //     return response($response, 200);
-            
-        //  }
+        //Remove a player (API) - *Player folder will be deleted* 
 
         $data = $request->validate([
             'player_id' => ['required', 'exists:players,id']  
@@ -160,14 +104,15 @@ class PlayersController extends Controller
         Players::where('id', $data['player_id'])->delete();
         
         $response = ['message' => 'Player deleted successfully.'];
-        return response($response, 200);
 
+        return response($response, 200);
 
     }
 
-    public function all(){
+    public function AllPlayerPage(){
 
         return view('AllPlayers');
+
     }
 
     public function display($id){
@@ -177,9 +122,12 @@ class PlayersController extends Controller
        return view('game_players',[
            'games'=> $games,
            ]);
+
     }
 
     public function add($id){
+
+        //Create a player (Panel)
 
         $data = request()->validate([
             'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$id],
@@ -190,36 +138,12 @@ class PlayersController extends Controller
             'games_id' => $id
         ]);
         return redirect('/game/' . $id);
+
     }
 
     public function delete($id){
 
-        // $players = Players::find($id);
-        // $fileinfo = player_files::select("JSON_file")->where("players_id", $players->id)->get();
-
-        // if($fileinfo->isEmpty()){
-        //     Players::where('id', $id)->delete();
-        //     return redirect('/game/' .$players->games_id);   
-        // } else {
-        //     foreach ($fileinfo as $fileinfo){
-        //         $file = $fileinfo->JSON_file;
-        //         $filepath[] = str_replace('\\','/',public_path($file));
-        //     }
-
-        //     foreach ($filepath as $filepath){
-        //         if(file_exists($filepath)){
-        //             unlink($filepath);    
-        //         }
-                 
-        //         else{
-        //             Players::where('id', $id)->delete();
-        //             return redirect('/game/' .$players->games_id);
-        //         }
-        //     } 
-        //     Players::where('id', $id)->delete();
-        //     return redirect('/game/' .$players->games_id); 
-        
-        //  }
+        //Delete a player (Panel) - *Player folder will be deleted*
 
         $players = players::find($id);
 
@@ -241,34 +165,9 @@ class PlayersController extends Controller
 
     }
 
-    public function deleteAll($id){
-        
-        // $players = Players::find($id);
-        // $fileinfo = player_files::select("JSON_file")->where("players_id", $players->id)->get();
+    public function deleteAllPlayer($id){
 
-        // if($fileinfo->isEmpty()){
-        //     Players::where('id', $id)->delete();
-        //     return redirect('/allplayer');   
-        // } else {
-        //     foreach ($fileinfo as $fileinfo){
-        //         $file = $fileinfo->JSON_file;
-        //         $filepath[] = str_replace('\\','/',public_path($file));
-        //     }
-
-        //     foreach ($filepath as $filepath){
-        //         if(file_exists($filepath)){
-        //             unlink($filepath);    
-        //         }
-                 
-        //         else{
-        //             Players::where('id', $id)->delete();
-        //             return redirect('/allplayer'); 
-        //         }
-        //     }
-        //     Players::where('id', $id)->delete();
-        //     return redirect('/allplayer');  
-        
-        // }
+        //Delete a player in All Players Page (Panel) - *Player folder will be deleted*
 
         $players = players::find($id);
 
@@ -287,5 +186,7 @@ class PlayersController extends Controller
         Players::where('id', $id)->delete();
         
         return redirect('/allplayer');
+
     }
+
 }

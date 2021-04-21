@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 
 class DatatableController extends Controller
 {
-    //
+    
     public function allPlayers(){
+
+        //All Players Datatable
 
         $query = Players::select('player_name', 'games_id', 'id');
         return datatables($query)
@@ -26,15 +28,22 @@ class DatatableController extends Controller
 
                 })->rawColumns(['Action'])
                 ->make(true);
+
     }
 
     public function gamelist(){
 
+        //Game List Datatable 
+
         $query = Games::select('id','game_name');
         return datatables($query)->make(true);
+
     }
 
     public function getPlayers($id){
+
+        //Players Datatable (According to game)
+
         $query = Players::select('player_name', 'id')->where('games_id', $id);
         return datatables($query)
             ->addIndexColumn()
@@ -53,6 +62,9 @@ class DatatableController extends Controller
     }
 
     public function PlayerFile($id){
+
+        //Player Files Datatable 
+
         $query = player_files::select('JSON_file', 'type', 'id', 'players_id')->where('players_id', $id);
         return datatables($query)
         ->addIndexColumn()
@@ -72,4 +84,5 @@ class DatatableController extends Controller
         ->make(true);
 
     }
+
 }

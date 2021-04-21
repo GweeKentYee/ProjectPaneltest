@@ -10,40 +10,38 @@ use Illuminate\Validation\Rule;
 
 class PlayerFileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function __construct()
     {
+        //Prevent access without authentication
+
         $this->middleware('auth');
+
     }
 
     public function index()
     {
-        //
+        //Show all player files (API)
+
         $playerfile = player_files::all();
+
         if ($playerfile->isEmpty()){
             
             $response = ['message' =>  'No player file avaliable.'];
             return response($response, 200);
             
         } else {
+
             return $playerfile;
+
         }
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        //Store new player file (API)
+
         $data = request()->validate([
             'player_file' => ['file', 'required'],
             'type' => ['required', 'unique:player_files,type,NULL,id,players_id,' .$request['player_id']],
@@ -71,15 +69,10 @@ class PlayerFileController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\player_file  $player_file
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request)
     {
-        //
+        //Show player files according to Player ID (API)
+
         $data = $request->validate([
             'player_id' => ['required','exists:players,id']   
         ]);
@@ -94,19 +87,17 @@ class PlayerFileController extends Controller
             return response($response, 200);
             
         } else {
+
             return $playerfiles;
+
         }
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\player_file  $player_file
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
+        //Update player file (API) - *Replacing the player file*
+
         $data = $request->validate([
             'file_id' => ['required', 'exists:player_files,id'],
             'player_file' => ['file', 'required']
@@ -140,15 +131,10 @@ class PlayerFileController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\player_file  $player_file
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(request $Request)
     {
-        //
+        //Delete a player file (API) - *Player file will be deleted according to File ID*
+
         $data = $Request->validate([
             'file_id' => ['required', 'exists:player_files,id']
         ]);
@@ -179,21 +165,7 @@ class PlayerFileController extends Controller
 
     public function downloadApi(request $request){
 
-        // $data = $request->validate([
-        //     'player_id' => ['required', 'exists:player_files,player_id'],
-        //     'type' => ['exists:player_files,type']    
-        // ]);
-
-        // $query2 = player_file::select("JSON_file")->where([
-        //     'player_id' => $data['player_id'],
-        //     'type' => $data['type']
-        // ])->get();
-
-        // foreach ($query2 as $query2){
-        //     $file = $query2->JSON_file;
-        // }
-
-        // return response()->download($file);
+        //Download a player file (API) 
 
         $data = $request->validate([
             'file_id' => ['required', 'exists:player_files,id']
@@ -202,49 +174,44 @@ class PlayerFileController extends Controller
         $playerfile = player_files::find($data['file_id']);
 
         return response()->download($playerfile->JSON_file);
+
     }
 
-    public function getContent($id){
+    public function ReadFileApi($id){
+
+        //Read a player file (API)
 
         $playerfile = player_files::findorfail($id);
+
         $content = file_get_contents(public_path($playerfile->JSON_file));
+
         $data = json_decode($content, true);
         return $data;
+
     }
 
-    
-    public function viewpage($id){
+    public function PlayerFilePage($id){
 
         $players = players::findorfail($id);
+
         $games = $players->games;
+
         return view ('player_files', [
             'players'=> $players,
             'games' => $games
             ]);
+
     }
     
     public function add($id){
+
+        //Store a player file (Panel)
 
         $player = players::find($id);
 
         $game = $player->games;
 
         $gamefile = $game->game_name;
-
-        // if (is_null(request('file_type'))){
-
-        //     $data = request()->validate([
-        //         'json/txt' => ['file', 'required'],
-        //     ]);
-
-        // } else {
-
-        //     $data = request()->validate([
-        //         'json/txt' => ['file', 'required'],
-        //         'file_type' => ['unique:player_files,type,NULL,id,players_id,' .$id],
-        //     ]);
-
-        // }
 
         $data = request()->validate([
             'json/txt' => ['file', 'required'],
@@ -256,13 +223,6 @@ class PlayerFileController extends Controller
         $directory = $gamefile . '/' . $playername;
         $filename = request()->file('json/txt')->getClientOriginalName();
 
-        // $fileconfirm = public_path('storage/uploads/'.$directory.'/'.$filename);
-        // if (file_exists(str_replace('\\','/',$fileconfirm))){
-        //     echo '<script>alert("test")</script>';
-        // } else {
-        //     echo '<script>alert("test2")</script>';
-        // }
-
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
 
         player_files::create([
@@ -272,10 +232,13 @@ class PlayerFileController extends Controller
         ]);
 
         return redirect('playerfile/' . $id);
+
     }
 
-    public function viewContent($id){
+    public function viewFile($id){
         
+        //View a player file (Panel)
+
         $playerfile = player_files::findorfail($id);
         $content = file_get_contents(public_path($playerfile->JSON_file));
         $data = json_decode($content, true);
@@ -285,23 +248,32 @@ class PlayerFileController extends Controller
 
     public function download($file1,$file2,$file3,$file4,$file5){
 
+        //Download a player file (Panel)
+
         $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5);
         
         return response()->download($path);
+
     }
 
-    public function editpage($id){
+    public function editPage($id){
         
         $playerfile = player_files::findorfail($id);
+
         $playerid = $playerfile->players_id;
+
         $players = players::find($playerid);
+
         return view ('edit_playerfile', [
             'players'=> $players,
             'playerfile'=> $playerfile
             ]);
+
     }
 
     public function edit($id){
+
+        //Edit a player file (Panel) - *Replacing the player file*
 
         $playerfile = player_files::find($id);
         $playerid = $playerfile->players_id;
@@ -331,6 +303,8 @@ class PlayerFileController extends Controller
 
     public function delete($id){
 
+        //Remove a player file (Panel) - *Player file will be deleted* 
+
         $playerfile = player_files::find($id);
 
         $file = $playerfile->JSON_file;
@@ -346,6 +320,7 @@ class PlayerFileController extends Controller
             return redirect('playerfile/'.$playerid);
 
         } else {
+            
             if(file_exists($filepath)){
 
                 unlink($filepath);
@@ -364,5 +339,7 @@ class PlayerFileController extends Controller
             }   
 
         }
+
     }
+
 }

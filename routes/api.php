@@ -17,18 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/game/allplayers', 'App\Http\Controllers\DatatableController@AllPlayers')->name('api.allplayers');
 Route::get('/game/list' ,'App\Http\Controllers\DatatableController@gamelist')->name('api.gamelist');
 Route::get('/game/player/{id}', 'App\Http\Controllers\DatatableController@getPlayers')->name('api.players.index');
-
 Route::get('/player/file/{id}', 'App\Http\Controllers\DatatableController@PlayerFile')->name('api.playerFile');
 
 Route::group(['middleware'], function () {
-    // ...
+
     // public routes
     Route::post('/login', 'App\Http\Controllers\Auth\ApiAuthController@login')->name('login.api');
     Route::post('/register','App\Http\Controllers\Auth\ApiAuthController@register')->name('register.api');
-    // ...
+
 });
 
 Route::middleware('auth:api')->group(function () {
+
     // our routes to be protected will go in here
     Route::post('/logout', 'App\Http\Controllers\Auth\ApiAuthController@logout')->name('logout.api');
     
@@ -43,14 +43,17 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/players/delete', 'App\Http\Controllers\PlayersController@destroy');
 
     Route::get('/playerfile', 'App\Http\Controllers\PlayerFileController@index');
-    Route::get('/playerfile/getcontent/{id}', 'App\Http\Controllers\PlayerFileController@getContent');
+    Route::get('/playerfile/read/{id}', 'App\Http\Controllers\PlayerFileController@ReadFileApi');
     Route::post('/playerfile/store', 'App\Http\Controllers\PlayerFileController@store');
     Route::post('/playerfile/update', 'App\Http\Controllers\PlayerFileController@update');
     Route::post('/playerfile/playerID', 'App\Http\Controllers\PlayerFileController@show');
     Route::post('/playerfile/download','App\Http\Controllers\PlayerFileController@downloadApi');
     Route::post('/playerfile/delete', 'App\Http\Controllers\PlayerFileController@destroy');
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+
     return $request->user();
+
 });

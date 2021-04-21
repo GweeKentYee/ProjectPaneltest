@@ -138,7 +138,7 @@
 
             $('#datatable').on('click','.path', function(){
                 var modal = $('#url');
-                modal.find('#fileURL').val("http://188.166.221.242/api/playerfile/getcontent/" + $(this).data('path'));
+                modal.find('#fileURL').val("http://188.166.221.242/api/playerfile/read/" + $(this).data('path'));
             })
         });
     </script>
