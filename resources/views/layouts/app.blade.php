@@ -65,6 +65,9 @@
                                     <a class="dropdown-item" href="/servermonitor">
                                         {{ __('Server Monitoring') }}
                                     </a>
+                                    <a class="dropdown-item" href="/registernew">
+                                        {{ __('Register New User') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

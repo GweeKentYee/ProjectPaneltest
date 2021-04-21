@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('/', 'App\Http\Controllers\Auth\LoginController@showLoginForm');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/servermonitor', 'App\Http\Controllers\ServerMonitorController@disk_total');
+Route::get('/registernew','App\Http\Controllers\RegisterController@register');
 
 // Auth::routes();
 Auth::routes(['register' => false]);

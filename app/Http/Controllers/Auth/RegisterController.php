@@ -66,8 +66,23 @@ class RegisterController extends Controller
     {
         return User::create([
             'username' => $data['username'],
-            // 'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    public function register(){
+
+        $data = request()->validate([
+            'username' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        User::create([
+            'username' => $data['username'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        return redirect('/home');
+        
     }
 }
