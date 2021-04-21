@@ -19,7 +19,7 @@ class TokenClear extends Command
      *
      * @var string
      */
-    protected $description = 'Remove tokens expired for more than a day.';
+    protected $description = 'Remove expired tokens.';
 
     /**
      * Create a new command instance.

@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 class ServerMonitorController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function disk_total()
-{
+    {
         $disktotal = disk_total_space('/'); //DISK usage
         $disktotalsize = $disktotal / 1073741824;
 
@@ -46,9 +51,7 @@ class ServerMonitorController extends Controller
         $cpu_load = sys_getloadavg(); 
         $load = $cpu_load[0] . '% / 100%';
         
-    return view('servermonitor',compact('diskuse','disktotalsize','diskusedize','memory','totalram','usedmemInGB','load'));
-}
-
-
+        return view('servermonitor',compact('diskuse','disktotalsize','diskusedize','memory','totalram','usedmemInGB','load'));
+    }
 
 }
