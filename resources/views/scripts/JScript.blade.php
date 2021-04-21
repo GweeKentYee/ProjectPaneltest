@@ -23,8 +23,6 @@
         toastr.options = {
             "closeButton": true,
             "preventDuplicates": true,
-            "timeOut": "300",
-            "extendedTimeOut": "300",
         };
 
         switch(type){
