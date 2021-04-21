@@ -15,19 +15,15 @@
     </script>
 
 @endif
-<script>
-    
-$(document).ready(function () {
-    toastr.options = {
-            "closeButton": true,
-            "preventDuplicates": true
-        };
-});
 
-</script>
 @if(Session::has('message'))
     <script>
         var type = "{{Session::get('alert-type', 'info')}}";
+
+        toastr.options = {
+            "closeButton": true,
+            "preventDuplicates": true
+        };
 
         switch(type){
             case 'success':
@@ -36,7 +32,6 @@ $(document).ready(function () {
             case 'error':
                 toastr.error("{{Session::get('message')}}");
         }
-        
     </script>
 @endif
 
