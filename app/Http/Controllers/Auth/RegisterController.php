@@ -89,11 +89,20 @@ class RegisterController extends Controller
         ])) {
             
             $notification = array(
-                'message' => 'Account registered successfully!',
+                'message' => 'Account registered successfully.',
                 'alert-type' => 'success'
             );
 
             return redirect('/home')->with($notification);
+
+        } else {
+
+            $notification = array(
+                'message' => 'Account register failed.',
+                'alert-type' => 'error'
+            );
+            
+            return back()->with($notification);
 
         }
 
