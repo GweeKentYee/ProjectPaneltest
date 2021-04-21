@@ -49,12 +49,6 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-                            
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -65,9 +59,13 @@
                                     <a class="dropdown-item" href="/servermonitor">
                                         {{ __('Server Monitoring') }}
                                     </a>
-                                    <a class="dropdown-item" href="/registernew">
-                                        {{ __('Register New User') }}
-                                    </a>
+
+                                    @if (Route::has('register'))
+                                        <a class="dropdown-item" href="/register">
+                                            {{ __('Register New User') }}
+                                        </a>
+                                    @endif
+                                    
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
