@@ -27,6 +27,10 @@
             case 'error':
                 toastr.error("{{Session::get('message')}}");
         }
+        toastr.options = {
+            "closeButton": true,
+            "preventDuplicates": true
+        };
     </script>
 @endif
 
