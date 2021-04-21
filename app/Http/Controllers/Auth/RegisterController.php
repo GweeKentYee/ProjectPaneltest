@@ -65,12 +65,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        User::create([
+        return User::create([
             'username' => $data['username'],
             // 'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
 
-        return redirect ('/home');
+    public function register(){
+
+        //Register new user 
+        
+        $data = request()->validate([
+            'username' => ['required', 'string', 'max:255'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        User::create([
+        'username' => $data['username'],
+        // 'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        ]);
+
+        return redirect('/home');
     }
 }
