@@ -215,7 +215,7 @@ class PlayerFileController extends Controller
 
         $data = request()->validate([
             'json/txt' => ['file', 'required'],
-            'file_type' => ['required','unique:player_files,type,NULL,id,players_id,' .$id],
+            'file_type' => ['required','mimetypes:application/json,text/plain','unique:player_files,type,NULL,id,players_id,' .$id],
         ]);
 
         $playername = $player->player_name;
