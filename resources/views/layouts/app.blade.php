@@ -61,11 +61,11 @@
                                     </a>
 
                                     @if (Route::has('register'))
-                                        <a class="dropdown-item" href="/register">
+                                        <a class="dropdown-item" href="/registernew">
                                             {{ __('Register New User') }}
                                         </a>
                                     @endif
-                                    
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
