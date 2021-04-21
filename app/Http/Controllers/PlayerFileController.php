@@ -196,7 +196,7 @@ class PlayerFileController extends Controller
 
         $games = $players->games;
 
-        return view ('player_files', [
+        return view ('PlayerFiles', [
             'players'=> $players,
             'games' => $games
             ]);
@@ -264,7 +264,7 @@ class PlayerFileController extends Controller
 
         $players = players::find($playerid);
 
-        return view ('edit_playerfile', [
+        return view ('EditPlayerFile', [
             'players'=> $players,
             'playerfile'=> $playerfile
             ]);

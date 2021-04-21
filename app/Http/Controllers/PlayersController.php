@@ -119,7 +119,7 @@ class PlayersController extends Controller
 
         $games = games::findorfail($id);
         
-       return view('game_players',[
+       return view('Players',[
            'games'=> $games,
            ]);
 

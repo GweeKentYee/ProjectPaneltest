@@ -51,7 +51,7 @@ class ServerMonitorController extends Controller
         $cpu_load = sys_getloadavg(); 
         $load = $cpu_load[0] . '% / 100%';
         
-        return view('servermonitor',compact('diskuse','disktotalsize','diskusedize','memory','totalram','usedmemInGB','load'));
+        return view('ServerMonitor',compact('diskuse','disktotalsize','diskusedize','memory','totalram','usedmemInGB','load'));
     }
 
 }
