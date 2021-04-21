@@ -43,7 +43,7 @@ class PlayerFileController extends Controller
         //Store new player file (API)
 
         $data = request()->validate([
-            'player_file' => ['file', 'required'],
+            'player_file' => ['mimetypes:application/json,text/plain', 'required'],
             'type' => ['required', 'unique:player_files,type,NULL,id,players_id,' .$request['player_id']],
             'player_id' => ['required', 'exists:players,id']
         ]);
@@ -100,7 +100,7 @@ class PlayerFileController extends Controller
 
         $data = $request->validate([
             'file_id' => ['required', 'exists:player_files,id'],
-            'player_file' => ['file', 'required']
+            'player_file' => ['mimetypes:application/json,text/plain', 'required']
         ]);
 
         $playerfile = player_files::find($data['file_id']);
@@ -281,7 +281,7 @@ class PlayerFileController extends Controller
         $gamefile = $players->games->game_name;
 
         $data = request()->validate([
-            'json/txt' => ['required', 'file'],
+            'json/txt' => ['required', 'mimetypes:application/json,text/plain'],
             'file_type' => ['required', 'unique:player_files,type,'.$id.',id,players_id,' .$playerid], 
         ]);
             
