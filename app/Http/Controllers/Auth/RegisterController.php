@@ -93,7 +93,7 @@ class RegisterController extends Controller
                 'alert-type' => 'success'
             );
 
-            return view('/home')->with($notification);
+            return redirect('/home')->with($notification);
 
         } else {
 
