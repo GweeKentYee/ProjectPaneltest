@@ -90,25 +90,9 @@ class GamesController extends Controller
             'game_name' => ['required', 'unique:games']
         ]);
 
-        if (Games::create($data)){
+        Games::create($data);
 
-            $notification = array(
-                'message' => 'Game created successfully.',
-                'alert-type' => 'success'
-            );
-
-            return redirect('/home')->with($notification);
-
-        } else {
-
-            $notification = array(
-                'message' => 'Create game failed.',
-                'alert-type' => 'error'
-            );
-            
-            return back()->with($notification);
-
-        }
+        return redirect('/home');
 
     }
 
