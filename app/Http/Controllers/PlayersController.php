@@ -79,6 +79,18 @@ class PlayersController extends Controller
     
     }
 
+    public function showSingle(request $request)
+    {
+        //Show player with player ID (API)
+
+        $data = $request->validate([
+            'player_id' => ['required', 'exists:players,id']
+        ]);
+
+        return players::find($data['player_id']);
+
+    }
+
     public function destroy(request $request)
     {
         //Remove a player (API) - *Player folder will be deleted* 

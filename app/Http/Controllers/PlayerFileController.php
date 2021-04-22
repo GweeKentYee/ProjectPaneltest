@@ -94,6 +94,18 @@ class PlayerFileController extends Controller
 
     }
 
+    public function showSingle(Request $request)
+    {
+        //Show player file with file ID (API)
+
+        $data = $request->validate([
+            'file_id' => ['required', 'exists:player_files,id']
+        ]);
+
+        return player_files::find($data['file_id']);
+        
+    }
+
     public function update(Request $request)
     {
         //Update player file (API) - *Replacing the player file*

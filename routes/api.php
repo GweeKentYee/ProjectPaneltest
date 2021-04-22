@@ -38,7 +38,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/games/delete', 'App\Http\Controllers\GamesController@destroy');
     
     Route::get('/players', 'App\Http\Controllers\PlayersController@index');
-    Route::post('/players/game', 'App\Http\Controllers\PlayersController@show');
+    Route::post('/players/gameID', 'App\Http\Controllers\PlayersController@show');
+    Route::post('/players/playerID', 'App\Http\Controllers\PlayersController@showSingle');
     Route::post('/players/create', 'App\Http\Controllers\PlayersController@store');
     Route::post('/players/delete', 'App\Http\Controllers\PlayersController@destroy');
 
@@ -47,6 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/playerfile/store', 'App\Http\Controllers\PlayerFileController@store');
     Route::post('/playerfile/update', 'App\Http\Controllers\PlayerFileController@update');
     Route::post('/playerfile/playerID', 'App\Http\Controllers\PlayerFileController@show');
+    Route::post('/playerfile/fileID', 'App\Http\Controllers\PlayerFileController@showSingle');
     Route::post('/playerfile/download','App\Http\Controllers\PlayerFileController@downloadApi');
     Route::post('/playerfile/delete', 'App\Http\Controllers\PlayerFileController@destroy');
 
