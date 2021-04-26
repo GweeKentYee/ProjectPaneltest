@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\game;
+use App\Models\Game;
 use App\Models\player;
 use App\Models\PlayerFile;
 use Illuminate\Http\Request;
@@ -43,11 +43,11 @@ class DatatableController extends Controller
     public function getPlayers($id){
 
         //Players Datatable (According to game)
-        $game = game::find($id);
+        $game = Game::find($id);
 
         $modelname = str_replace(' ', '',$game->game_name);
 
-        $model = "app\\Models\\".$modelname;
+        $model = "App\\Models\\".$modelname;
 
         $query = $model::select('player_name', 'id','games_id')->where('games_id', $id);
         return datatables($query)
@@ -70,7 +70,7 @@ class DatatableController extends Controller
 
         //Player Files Datatable 
 
-        $game = game::findorfail($gameID);
+        $game = Game::findorfail($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
