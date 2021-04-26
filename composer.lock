@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cc17db6c53b4720c040cfa1ca71ac2d",
+    "content-hash": "46dce861d3a91f9715431bdeeca16167",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9284,69 +9284,6 @@
                 }
             ],
             "time": "2021-03-23T07:16:29+00:00"
-        },
-        {
-            "name": "reliese/laravel",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reliese/laravel.git",
-                "reference": "6f0a710368a065f76e9be49475a254bd821316fe"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reliese/laravel/zipball/6f0a710368a065f76e9be49475a254bd821316fe",
-                "reference": "6f0a710368a065f76e9be49475a254bd821316fe",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": ">=2.5",
-                "illuminate/console": ">=5.1",
-                "illuminate/contracts": ">=5.1",
-                "illuminate/database": ">=5.1",
-                "illuminate/filesystem": ">=5.1",
-                "illuminate/support": ">=5.1",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "fzaninotto/faker": "~1.4",
-                "mockery/mockery": ">=1.4",
-                "phpunit/phpunit": "^9"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Reliese\\Coders\\CodersServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Reliese\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cristian Llanos",
-                    "email": "cristianllanos@outlook.com"
-                }
-            ],
-            "description": "Reliese Components for Laravel Framework code generation.",
-            "homepage": "http://cristianllanos.com",
-            "keywords": [
-                "laravel",
-                "reliese"
-            ],
-            "support": {
-                "issues": "https://github.com/reliese/laravel/issues",
-                "source": "https://github.com/reliese/laravel"
-            },
-            "time": "2021-03-07T18:24:00+00:00"
         },
         {
             "name": "sebastian/cli-parser",
