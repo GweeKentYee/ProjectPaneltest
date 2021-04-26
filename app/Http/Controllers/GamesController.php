@@ -164,8 +164,7 @@ class GamesController extends Controller
 
             if(file_exists($GameModel)){
 
-                dd("ahah");
-                //  unlink($GameModel);
+                 unlink($GameModel);
 
             }
 
@@ -174,8 +173,6 @@ class GamesController extends Controller
                 unlink($GamePlayerModel);
 
             }
-
-            dd("hehe");
             
             Schema::dropIfExists(''.$GamePlayerTable.'');
 
