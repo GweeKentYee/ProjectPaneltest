@@ -110,7 +110,7 @@ class GamesController extends Controller
 
         Schema::create($GamePlayerTable, function (Blueprint $table) {
 
-            $GameTable = str_replace(' ','_',request('game_name'));
+            $GameTable = lcfirst(str_replace(' ','_',request('game_name')));
 
             $table->id();
             $table->string('JSON_file')->required();
