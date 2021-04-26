@@ -159,8 +159,8 @@ class GamesController extends Controller
 
             $modelname = str_replace(' ','',$gamename);
 
-            $GameModel = base_path("App\\Models\\".$modelname.".php");
-            $GamePlayerModel = base_path("App\\Models\\".$modelname."PlayerFiles.php");
+            $GameModel = base_path("app\\Models\\".$modelname.".php");
+            $GamePlayerModel = base_path("app\\Models\\".$modelname."PlayerFiles.php");
 
             if(file_exists($GameModel)){
 
