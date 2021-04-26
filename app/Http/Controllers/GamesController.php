@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\game;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Migrations\Migration;
