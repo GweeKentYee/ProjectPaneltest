@@ -174,9 +174,9 @@ class GamesController extends Controller
 
             }
             
-            Schema::dropIfExists(''.$GamePlayerTable.'');
+            Schema::dropIfExists("'.$GamePlayerTable.'");
 
-            Schema::dropIfExists(''.$GameTable.'');
+            Schema::dropIfExists("'.$GameTable.'");
 
             Artisan::call('krlove:generate:model Game --table-name="games"');
 
