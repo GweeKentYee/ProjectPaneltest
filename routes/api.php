@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/game/allplayers', 'App\Http\Controllers\DatatableController@AllPlayers')->name('api.allplayers');
 Route::get('/game/list' ,'App\Http\Controllers\DatatableController@gamelist')->name('api.gamelist');
 Route::get('/game/player/{id}', 'App\Http\Controllers\DatatableController@getPlayers')->name('api.players.index');
-Route::get('/player/file/{id}', 'App\Http\Controllers\DatatableController@PlayerFile')->name('api.playerFile');
+Route::get('/player/file/{gameID}/{playerID}', 'App\Http\Controllers\DatatableController@PlayerFile')->name('api.playerFile');
 
 Route::group(['middleware'], function () {
 

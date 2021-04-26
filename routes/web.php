@@ -31,15 +31,15 @@ Route::get('/allplayer' , 'App\Http\Controllers\PlayersController@AllPlayerPage'
 Route::get('/allplayer/delete/{id}', 'App\Http\Controllers\PlayersController@deleteAllPlayer');
 
 Route::post('/player/add/{id}', 'App\Http\Controllers\PlayersController@add');
-Route::get('/player/delete/{id}', 'App\Http\Controllers\PlayersController@delete');
+Route::get('/player/delete/{gameID}/{playerID}', 'App\Http\Controllers\PlayersController@delete');
 
-Route::get('/playerfile/{id}', 'App\Http\Controllers\PlayerFileController@PlayerFilePage');
-Route::post('/playerfile/add/{id}', 'App\Http\Controllers\PlayerFileController@add');
-Route::get('/playerfile/view/{id}', 'App\Http\Controllers\PlayerFileController@viewFile');
+Route::get('/playerfile/{gameID}/{playerID}', 'App\Http\Controllers\PlayerFileController@PlayerFilePage');
+Route::post('/playerfile/add/{gameID}/{playerID}', 'App\Http\Controllers\PlayerFileController@add');
+Route::get('/playerfile/view/{gameID}/{fileID}', 'App\Http\Controllers\PlayerFileController@viewFile');
 Route::get('/playerfile/download/{file1}/{file2}/{file3}/{file4}/{file5}', 'App\Http\Controllers\PlayerFileController@download');
-Route::get('/playerfile/edit/{id}','App\Http\Controllers\PlayerFileController@editPage');
-Route::patch('/playerfile/editfile/{id}', 'App\Http\Controllers\PlayerFileController@edit');
-Route::get('/playerfile/delete/{id}', 'App\Http\Controllers\PlayerFileController@delete');
+Route::get('/playerfile/edit/{gameID}/{fileID}','App\Http\Controllers\PlayerFileController@editPage');
+Route::patch('/playerfile/editfile/{gameID}/{fileID}', 'App\Http\Controllers\PlayerFileController@edit');
+Route::get('/playerfile/delete/{gameID}/{fileID}', 'App\Http\Controllers\PlayerFileController@delete');
 
 
 

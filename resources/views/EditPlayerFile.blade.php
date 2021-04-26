@@ -5,14 +5,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h3><a href ="/game/{{$players->games->id}}">{{$players->games->game_name}}</a> / <a href = "/playerfile/{{$players->id}}">{{$players->player_name}}</a></h3>
-            <form action="/playerfile/editfile/{{$playerfile->id}}" method="post" enctype="multipart/form-data">
+            <h3><a href ="/game/{{$players->game->id}}">{{$players->game->game_name}}</a> / <a href = "/playerfile/{{$players->id}}">{{$players->player_name}}</a></h3>
+            <form action="/playerfile/editfile/{{$players->game->id}}/{{$playerfile->id}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <br>
             <br>
             <div class="modal-header">
-                <h4>Old File: <a href = "/playerfile/view/{{$playerfile->id}}">{{$playerfile->JSON_file}}</a></h4>
+                <h4>Old File: <a href = "/playerfile/view/{{$players->game->id}}/{{$playerfile->id}}">{{$playerfile->JSON_file}}</a></h4>
              </div>
                 <div class="modal-body">
                     <div class="playerfile">

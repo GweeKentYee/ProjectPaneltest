@@ -35,7 +35,7 @@
                   <span aria-hidden="true">&times;</span>
                   </button>
                </div>
-               <form action="/playerfile/add/{{$players->id}}" method="post" enctype="multipart/form-data">
+               <form action="/playerfile/add/{{$games->id}}/{{$players->id}}" method="post" enctype="multipart/form-data">
                 @csrf
                     <div class="modal-body">
                         <div class="playerfile">
@@ -115,7 +115,7 @@
                 }], 
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ route('api.playerFile', $players->id)}}",
+                "ajax": "{{ route('api.playerFile', [$games->id, $players->id])}}",
                 "columns": [
                     {"data": "JSON_file"},
                     {"data": "type"},
