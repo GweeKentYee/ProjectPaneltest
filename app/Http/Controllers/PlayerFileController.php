@@ -401,7 +401,7 @@ class PlayerFileController extends Controller
                 $playerid = $playerfile->players_id;
 
                 return redirect('playerfile/'.$gameID.'/'.$playerid);
-            }   `
+            }   
 
         }
 
