@@ -47,7 +47,7 @@ class DatatableController extends Controller
 
         $modelname = str_replace(' ', '',$game->game_name);
 
-        $model = "App\\Models\\".$modelname;
+        $model = app_path("Models/".$modelname);
 
         $query = $model::select('player_name', 'id','games_id')->where('games_id', $id);
         return datatables($query)
@@ -74,7 +74,7 @@ class DatatableController extends Controller
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
-        $GamePlayerModel = "App\\Models\\".$GameModelName."PlayerFiles";
+        $GamePlayerModel =  app_path("Models/".$GameModelName."PlayerFiles");
 
         $query = $GamePlayerModel::select('JSON_file', 'type', 'id', 'players_id')->where('players_id', $playerID);
         return datatables($query)
