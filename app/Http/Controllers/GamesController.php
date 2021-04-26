@@ -25,7 +25,7 @@ class GamesController extends Controller
     {
         //Show all games (API)
 
-        $games = game::all();
+        $games = Game::all();
 
         if ($games->isEmpty()){
             
@@ -48,7 +48,7 @@ class GamesController extends Controller
             'game_name' => ['required','unique:games,game_name']
         ]);
 
-        return game::create($data);
+        return Game::create($data);
 
     }
 
@@ -73,7 +73,7 @@ class GamesController extends Controller
             'games_id' => ['required','exists:games,id']
         ]);
 
-        $game = game::find($data['games_id']);
+        $game = Game::find($data['games_id']);
 
         $path = public_path('storage/uploads/'.$game->game_name);
 
@@ -145,7 +145,7 @@ class GamesController extends Controller
         
         foreach ($checked as $checked){
 
-            $game[] = game::find($checked); 
+            $game[] = Game::find($checked); 
 
         }  
 
@@ -188,7 +188,7 @@ class GamesController extends Controller
 
         foreach ($checkedvalue as $checkedvalue){
 
-            game::where('id',$checkedvalue)->delete();
+            Game::where('id',$checkedvalue)->delete();
 
         }
 

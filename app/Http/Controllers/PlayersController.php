@@ -62,7 +62,7 @@ class PlayersController extends Controller
             'games_id' => ['required','exists:games,id']   
         ]);
         
-        $game = game::find($data["games_id"]);
+        $game = Game::find($data["games_id"]);
 
         $players = $game->players;
 
@@ -129,7 +129,7 @@ class PlayersController extends Controller
 
     public function display($id){
 
-        $games = game::findorfail($id);
+        $games = Game::findorfail($id);
         
        return view('Players',[
            'games'=> $games,
@@ -141,7 +141,7 @@ class PlayersController extends Controller
 
         //Create a player (Panel)
 
-        $game = game::findorfail($id);
+        $game = Game::findorfail($id);
 
         $modelname = str_replace(' ', '',$game->game_name);
 

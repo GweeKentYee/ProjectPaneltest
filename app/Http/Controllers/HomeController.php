@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\game;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $games = game::all();
+        $games = Game::all();
         return view('home',[
             'games' => $games
         ]);

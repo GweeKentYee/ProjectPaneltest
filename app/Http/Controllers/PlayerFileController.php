@@ -221,7 +221,7 @@ class PlayerFileController extends Controller
 
         //Store a player file (Panel)
 
-        $game = game::find($gameID);
+        $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -263,7 +263,7 @@ class PlayerFileController extends Controller
         
         //View a player file (Panel)
 
-        $game = game::find($gameID);
+        $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -293,7 +293,7 @@ class PlayerFileController extends Controller
 
     public function editPage($gameID, $fileID){
         
-        $game = game::find($gameID);
+        $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -318,7 +318,7 @@ class PlayerFileController extends Controller
 
         //Edit a player file (Panel) - *Replacing the player file*
 
-        $game = game::find($gameID);
+        $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -361,7 +361,7 @@ class PlayerFileController extends Controller
     public function delete($gameID, $fileID){
 
         //Remove a player file (Panel) - *Player file will be deleted* 
-        $game = game::find($gameID);
+        $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
