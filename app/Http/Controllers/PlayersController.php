@@ -145,7 +145,7 @@ class PlayersController extends Controller
 
         $modelname = str_replace(' ', '',$game->game_name);
 
-        $tablename = str_replace(' ', '_',$game->game_name);
+        $tablename = lcfirst(str_replace(' ', '_',$game->game_name));
 
         $model = "App\\Models\\".$modelname;
 
