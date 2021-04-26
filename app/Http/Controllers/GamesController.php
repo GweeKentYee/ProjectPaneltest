@@ -153,7 +153,7 @@ class GamesController extends Controller
 
             $gamename = $game->game_name;
 
-            $GameTable = str_replace(' ','_',$gamename);
+            $GameTable = lcfirst(str_replace(' ','_',$gamename));
 
             $GamePlayerTable = $GameTable.'_player_files';
 
@@ -174,9 +174,9 @@ class GamesController extends Controller
 
             }
             
-            Schema::dropIfExists("'.$GamePlayerTable.'");
+            Schema::dropIfExists(''.$GamePlayerTable.'');
 
-            Schema::dropIfExists("'.$GameTable.'");
+            Schema::dropIfExists(''.$GameTable.'');
 
             Artisan::call('krlove:generate:model Game --table-name="games"');
 
