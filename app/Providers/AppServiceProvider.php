@@ -16,8 +16,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         
-            $this->app->register(\Reliese\Coders\CodersServiceProvider::class);
-        
     }
 
     /**
