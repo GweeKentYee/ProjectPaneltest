@@ -235,7 +235,7 @@ class PlayerFileController extends Controller
 
         $gamefile = $game->game_name;
 
-        $GamePlayerTable = str_replace(' ', '_',$game->game_name.'_player_files');
+        $GamePlayerTable = lcfirst(str_replace(' ', '_',$game->game_name.'_player_files'));
 
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,text/plain', 'required'],
@@ -326,7 +326,7 @@ class PlayerFileController extends Controller
 
         $GameFileModel = "App\\Models\\".$GameModelName.'PlayerFiles';
 
-        $GameFileTable = str_replace(' ','_',$game->game_name.'_player_files');
+        $GameFileTable = lcfirst(str_replace(' ','_',$game->game_name.'_player_files'));
 
         $playerfile = $GameFileModel::findorfail($fileID);
 
@@ -401,7 +401,7 @@ class PlayerFileController extends Controller
                 $playerid = $playerfile->players_id;
 
                 return redirect('playerfile/'.$gameID.'/'.$playerid);
-            }   
+            }   `
 
         }
 
