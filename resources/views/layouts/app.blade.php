@@ -62,15 +62,16 @@
                                         {{ __('Server Monitoring') }}
                                     </a>
 
-                                    @if (Route::has('register'))
-                                        <a class="dropdown-item" href="/register">
-                                            {{ __('Register New Account') }}
-                                        </a>
-                                    @endif
-                                    
+                                    @if (Auth::user()->is_admin == '1')
+                                        @if (Route::has('register'))
+                                            <a class="dropdown-item" href="/register">
+                                                {{ __('Register Sub-Account') }}
+                                            </a>
+                                        @endif
+                                    @endif 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

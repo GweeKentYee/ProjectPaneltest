@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use App\Models\player;
 use App\Models\PlayerFile;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
 
@@ -130,10 +132,25 @@ class PlayersController extends Controller
     public function display($id){
 
         $games = Game::findorfail($id);
-        
-       return view('Players',[
-           'games'=> $games,
-           ]);
+
+        if (Auth::user()->is_admin == '0'){
+
+            if (!$games->User->is_admin == '1'){
+
+                $this->authorize('view', $games);
+            }
+
+        return view('Players',[
+            'games'=> $games,
+        ]);
+
+       } else {
+
+            return view('Players',[
+                'games'=> $games,
+             ]);
+
+       }
 
     }
 

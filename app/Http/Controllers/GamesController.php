@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
 class GamesController extends Controller
@@ -129,7 +130,10 @@ class GamesController extends Controller
         Artisan::call('krlove:generate:model '.$GamePlayerModelName.' --table-name='.$GamePlayerTable.'');
         Artisan::call('krlove:generate:model Game --table-name="games"');
 
-        Game::create($data);
+        Game::create([
+            'game_name' => $data['game_name'],
+            'users_id' => Auth::id(),
+        ]);
 
         return redirect('/home');
 

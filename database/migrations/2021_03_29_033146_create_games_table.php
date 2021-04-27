@@ -16,7 +16,11 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('game_name')->unique()->required();
+            $table->unsignedBigInteger('users_id')->required();
             $table->timestamps();
+
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index('users_id');
         });
     }
 

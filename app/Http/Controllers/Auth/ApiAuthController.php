@@ -24,7 +24,12 @@ class ApiAuthController extends Controller
         }
         $request['password']=Hash::make($request['password']);
         $request['remember_token'] = Str::random(10);
-        $user = User::create($request->toArray());
+        $user = User::create([
+            'username' => $request['username'],
+            'password' => $request['password'],
+            'is_admin' => '1',
+            'remember_token' => $request['remember_token'],
+        ]);
         return response($user, 200);
     }
 

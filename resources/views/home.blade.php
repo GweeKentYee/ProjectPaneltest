@@ -23,14 +23,35 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        @foreach ($games as $games)
-                        <div class = "games_row" >
-                            <input type = "checkbox" class = "@error('remove_game') is-invalid @enderror"name = "remove_game[]" value = {{$games->id}} style = "float:right;">
-                            <label for = "remove_game">
-                                <a href = "/game/{{$games->id}}">{{ $games->game_name }}</a>
-                            </label>
-                        </div>
-                        @endforeach
+                        @if (Auth::user()->is_admin == '0')
+                            @foreach ($admingames as $admingames)
+                                @foreach ($admingames as $admingames)
+                                <div class = "admin_games_row" >
+                                    <label>
+                                        <a href = "/game/{{$admingames->id}}">{{ $admingames->game_name }}</a>
+                                    </label>
+                                </div>
+                                @endforeach
+                            @endforeach
+                            @foreach ($AccountGames as $AccountGames)
+                            <div class = "games_row" >
+                                <input type = "checkbox" class = "@error('remove_game') is-invalid @enderror"name = "remove_game[]" value = {{$AccountGames->id}} style = "float:right;">
+                                <label for = "remove_game">
+                                    <a href = "/game/{{$AccountGames->id}}">{{ $AccountGames->game_name }}</a>
+                                </label>
+                            </div>
+                            @endforeach
+                        @else
+                            @foreach ($games as $games)
+                            <div class = "games_row" >
+                                <input type = "checkbox" class = "@error('remove_game') is-invalid @enderror"name = "remove_game[]" value = {{$games->id}} style = "float:right;">
+                                <label for = "remove_game">
+                                    <a href = "/game/{{$games->id}}">{{ $games->game_name }}</a>
+                                </label>
+                            </div>
+                            @endforeach
+                        @endif 
+
                     </div>
                 </form>  
             </div>
