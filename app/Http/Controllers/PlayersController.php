@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Models\player;
+use App\Models\Player;
 use App\Models\PlayerFile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -158,19 +158,29 @@ class PlayersController extends Controller
 
         //Create a player (Panel)
 
-        $game = Game::findorfail($id);
+        // $game = Game::findorfail($id);
 
-        $modelname = str_replace(' ', '',$game->game_name);
+        // $modelname = str_replace(' ', '',$game->game_name);
 
-        $tablename = lcfirst(str_replace(' ', '_',$game->game_name));
+        // $tablename = lcfirst(str_replace(' ', '_',$game->game_name));
 
-        $model = "App\\Models\\".$modelname;
+        // $model = "App\\Models\\".$modelname;
+
+        // $data = request()->validate([
+        //     'player_name' => ['required', 'unique:'.$tablename.',player_name,NULL,id'],
+        // ]);
+
+        // $model::create([
+        //     'player_name' => $data['player_name'],
+        //     'games_id' => $id
+        // ]);
+        // return redirect('/game/' . $id);
 
         $data = request()->validate([
-            'player_name' => ['required', 'unique:'.$tablename.',player_name,NULL,id'],
+            'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$id],
         ]);
-
-        $model::create([
+        
+        Player::create([
             'player_name' => $data['player_name'],
             'games_id' => $id
         ]);
@@ -178,15 +188,15 @@ class PlayersController extends Controller
 
     }
 
-    public function delete(Game $gameID, $playerID){
+    public function delete($playerID){
 
         //Delete a player (Panel) - *Player folder will be deleted*
         
-        $modelname = str_replace(' ', '',$gameID->game_name);
+        // $modelname = str_replace(' ', '',$gameID->game_name);
 
-        $model = "App\\Models\\".$modelname;
+        // $model = "App\\Models\\".$modelname;
 
-        $players = $model::find($playerID);
+        $players = Player::find($playerID);
 
         $game = $players->game;
 
@@ -200,17 +210,17 @@ class PlayersController extends Controller
         
         File::deleteDirectory($path);
 
-        $model::where('id', $playerID)->delete();
+        Player::where('id', $playerID)->delete();
         
         return redirect('/game/' .$players->games_id);
 
     }
 
-    public function deleteAllPlayer($id){
+    public function deleteAllPlayer($playerID){
 
         //Delete a player in All Players Page (Panel) - *Player folder will be deleted*
 
-        $players = player::find($id);
+        $players = Player::find($playerID);
 
         $game = $players->game;
 
@@ -224,7 +234,7 @@ class PlayersController extends Controller
         
         File::deleteDirectory($path);
 
-        Player::where('id', $id)->delete();
+        Player::where('id', $playerID)->delete();
         
         return redirect('/allplayer');
 

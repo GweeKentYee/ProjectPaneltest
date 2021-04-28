@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property integer $id
- * @property integer $users_id
- * @property string $game_name
+ * @property integer $games_id
+ * @property string $player_name
  * @property string $created_at
  * @property string $updated_at
- * @property User $user
- * @property Player[] $players
+ * @property Game $game
+ * @property PlayerFile[] $playerFiles
  */
-class Game extends Model
+class Player extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
@@ -25,21 +25,21 @@ class Game extends Model
     /**
      * @var array
      */
-    protected $fillable = ['users_id', 'game_name', 'created_at', 'updated_at'];
+    protected $fillable = ['games_id', 'player_name', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function game()
     {
-        return $this->belongsTo('App\Models\User', 'users_id');
+        return $this->belongsTo('App\Models\Game', 'games_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function players()
+    public function playerFiles()
     {
-        return $this->hasMany('App\Models\Player', 'games_id');
+        return $this->hasMany('App\Models\PlayerFile', 'players_id');
     }
 }

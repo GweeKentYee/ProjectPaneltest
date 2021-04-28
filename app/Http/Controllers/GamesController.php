@@ -96,39 +96,25 @@ class GamesController extends Controller
         ]);
 
         $GameTable = lcfirst(str_replace(' ','_',$data['game_name']));
-        
-        Schema::create($GameTable, function (Blueprint $table) {
-            $table->id();
-            $table->string('player_name')->required();
-            $table->unsignedBigInteger('games_id')->required();
-            $table->timestamps();
 
-            $table->foreign('games_id')->references('id')->on('games')->onDelete('cascade');
-            $table->index('games_id');
-        });
-        
-        $GamePlayerTable = $GameTable.'_player_files';
+        if (!Schema::hasTable($GameTable)) {
+            Schema::create($GameTable, function (Blueprint $table) {
 
-        Schema::create($GamePlayerTable, function (Blueprint $table) {
+                $table->id();
+                $table->string('JSON_file')->required();
+                $table->string('type')->nullable();
+                $table->unsignedBigInteger('players_id')->required();
+                $table->timestamps();
 
-            $GameTable = lcfirst(str_replace(' ','_',request('game_name')));
-
-            $table->id();
-            $table->string('JSON_file')->required();
-            $table->string('type')->nullable();
-            $table->unsignedBigInteger('players_id')->required();
-            $table->timestamps();
-
-            $table->foreign('players_id')->references('id')->on($GameTable)->onDelete('cascade');
-            $table->index('players_id');
-        });
+                $table->foreign('players_id')->references('id')->on('players')->onDelete('cascade');
+                $table->index('players_id');
+            });
+        }   
 
         $GameModelName = str_replace(' ', '',$data['game_name']);
-        $GamePlayerModelName = $GameModelName.'PlayerFiles';
 
         Artisan::call('krlove:generate:model '.$GameModelName.' --table-name='.$GameTable.'');
-        Artisan::call('krlove:generate:model '.$GamePlayerModelName.' --table-name='.$GamePlayerTable.'');
-        Artisan::call('krlove:generate:model Game --table-name="games"');
+        Artisan::call('krlove:generate:model Player --table-name="players"');
 
         Game::create([
             'game_name' => $data['game_name'],
@@ -159,12 +145,9 @@ class GamesController extends Controller
 
             $GameTable = lcfirst(str_replace(' ','_',$gamename));
 
-            $GamePlayerTable = $GameTable.'_player_files';
-
             $modelname = str_replace(' ','',$gamename);
 
             $GameModel = app_path("/Models/".$modelname.".php");
-            $GamePlayerModel = app_path("/Models/".$modelname."PlayerFiles.php");
 
             if(file_exists($GameModel)){
 
@@ -172,17 +155,9 @@ class GamesController extends Controller
 
             }
 
-            if(file_exists($GamePlayerModel)){
-
-                unlink($GamePlayerModel);
-
-            }
-            
-            Schema::dropIfExists(''.$GamePlayerTable.'');
-
             Schema::dropIfExists(''.$GameTable.'');
 
-            Artisan::call('krlove:generate:model Game --table-name="games"');
+            Artisan::call('krlove:generate:model Player --table-name="players"');
 
             $path = public_path('storage/uploads/'.$gamename);
 

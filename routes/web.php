@@ -28,10 +28,10 @@ Route::delete('/game/remove','App\Http\Controllers\GamesController@remove');
 Route::get('/game/{id}', 'App\Http\Controllers\PlayersController@display');
 
 Route::get('/allplayer' , 'App\Http\Controllers\PlayersController@AllPlayerPage');
-Route::get('/allplayer/delete/{id}', 'App\Http\Controllers\PlayersController@deleteAllPlayer');
+Route::get('/allplayer/delete/{playerID}', 'App\Http\Controllers\PlayersController@deleteAllPlayer');
 
 Route::post('/player/add/{id}', 'App\Http\Controllers\PlayersController@add');
-Route::get('/player/delete/{gameID}/{playerID}', 'App\Http\Controllers\PlayersController@delete');
+Route::get('/player/delete/{playerID}', 'App\Http\Controllers\PlayersController@delete');
 
 Route::get('/playerfile/{gameID}/{playerID}', 'App\Http\Controllers\PlayerFileController@PlayerFilePage');
 Route::post('/playerfile/add/{gameID}/{playerID}', 'App\Http\Controllers\PlayerFileController@add');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Models\player;
+use App\Models\Player;
 use App\Models\PlayerFile;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -204,11 +204,11 @@ class PlayerFileController extends Controller
 
     public function PlayerFilePage(Game $gameID, $playerID){
 
-        $modelname = str_replace(' ', '',$gameID->game_name);
+        // $modelname = str_replace(' ', '',$gameID->game_name);
 
-        $model = "App\\Models\\".$modelname;
+        // $GameModel = "App\\Models\\".$modelname;
 
-        $players = $model::findorfail($playerID);
+        $players = Player::findorfail($playerID);
 
         return view ('PlayerFiles', [
             'players'=> $players,
@@ -227,19 +227,19 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GamePlayerModel = "App\\Models\\".$GameModelName.'PlayerFiles';
+        // $GamePlayerModel = "App\\Models\\".$GameModelName.'PlayerFiles';
 
-        $players = $GameModel::findorfail($playerID);
+        $players = Player::findorfail($playerID);
 
         $game = $players->game;
 
         $gamefile = $game->game_name;
 
-        $GamePlayerTable = lcfirst(str_replace(' ', '_',$game->game_name.'_player_files'));
+        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
 
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,text/plain', 'required'],
-            'file_type' => ['required','unique:'.$GamePlayerTable.',type,NULL,id,players_id,'.$playerID],
+            'file_type' => ['required','unique:'.$GameTable.',type,NULL,id,players_id,'.$playerID],
         ]);
 
         $playername = $players->player_name;
@@ -249,7 +249,7 @@ class PlayerFileController extends Controller
 
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
 
-        $GamePlayerModel::create([
+        $GameModel::create([
             'JSON_file' => str_replace('\\','/',$filepath),
             'type' => request('file_type'),
             'players_id' => $playerID
@@ -269,9 +269,7 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameFileModel = "App\\Models\\".$GameModelName.'PlayerFiles';
-
-        $playerfile = $GameFileModel::findorfail($fileID);
+        $playerfile = $GameModel::findorfail($fileID);
 
         $content = file_get_contents(public_path($playerfile->JSON_file));
 
@@ -299,13 +297,11 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameFileModel = "App\\Models\\".$GameModelName.'PlayerFiles';
-
-        $playerfile = $GameFileModel::findorfail($fileID);
+        $playerfile = $GameModel::findorfail($fileID);
 
         $playerid = $playerfile->players_id;
 
-        $players = $GameModel::find($playerid);
+        $players = Player::find($playerid);
 
         return view ('EditPlayerFile', [
             'players'=> $players,
@@ -324,21 +320,19 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameFileModel = "App\\Models\\".$GameModelName.'PlayerFiles';
+        $GameTable = lcfirst(str_replace(' ','_',$game->game_name));
 
-        $GameFileTable = lcfirst(str_replace(' ','_',$game->game_name.'_player_files'));
-
-        $playerfile = $GameFileModel::findorfail($fileID);
+        $playerfile = $GameModel::findorfail($fileID);
 
         $playerid = $playerfile->players_id;
         
-        $players = $playerfile->$GameModelName;
+        $players = $playerfile->player;
 
         $gamefile = $game->game_name;
 
         $data = request()->validate([
             'json/txt' => ['required', 'mimetypes:application/json,text/plain'],
-            'file_type' => ['required', 'unique:'.$GameFileTable.',type,'.$fileID.',id,players_id,' .$playerid], 
+            'file_type' => ['required', 'unique:'.$GameTable.',type,'.$fileID.',id,players_id,' .$playerid], 
         ]);
             
         $playername = $players->player_name;
@@ -367,9 +361,7 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameFileModel = "App\\Models\\".$GameModelName.'PlayerFiles';
-
-        $playerfile = $GameFileModel::findorfail($fileID);
+        $playerfile = $GameModel::findorfail($fileID);
 
         $file = $playerfile->JSON_file;
 
@@ -377,7 +369,7 @@ class PlayerFileController extends Controller
 
         if ($file == null){
 
-            $GameFileModel::where('id', $fileID)->delete();
+            $GameModel::where('id', $fileID)->delete();
 
             $playerid = $playerfile->players_id;
 
@@ -388,7 +380,7 @@ class PlayerFileController extends Controller
             if(file_exists($filepath)){
 
                 unlink($filepath);
-                $GameFileModel::where('id', $fileID)->delete();
+                $GameModel::where('id', $fileID)->delete();
 
                 $playerid = $playerfile->players_id;
     
@@ -396,7 +388,7 @@ class PlayerFileController extends Controller
 
             } else{
 
-                $GameFileModel::where('id', $fileID)->delete();
+                $GameModel::where('id', $fileID)->delete();
 
                 $playerid = $playerfile->players_id;
 
