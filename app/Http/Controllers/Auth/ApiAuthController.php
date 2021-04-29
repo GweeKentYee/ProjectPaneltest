@@ -45,7 +45,7 @@ class ApiAuthController extends Controller
         $user = User::where('username', $request->username)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                $token = $user->createToken('auth_token')->plainTextToken;
                 $userdata = [
                     'id' => $user['id'],
                     'username' => $user['username'],
@@ -63,8 +63,8 @@ class ApiAuthController extends Controller
     }
 
     public function logout (Request $request) {
-        $token = $request->user()->token();
-        $token->delete();
+        $user = $request->user();
+        $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
         $response = ['message' => 'You have been successfully logged out!'];
         return response($response, 200);
     }
