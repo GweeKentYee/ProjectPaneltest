@@ -140,7 +140,7 @@
 
             $('#datatable').on('click','.path', function(){
                 var modal = $('#url');
-                modal.find('#fileURL').val("http://188.166.221.242/api/playerfile/read/" + "{{ $games->id }}/" + $(this).data('path'));
+                modal.find('#fileURL').val("http://128.199.163.195/api/playerfile/read/" + "{{ $games->id }}/" + $(this).data('path'));
             })
         });
     </script>
