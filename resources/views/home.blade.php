@@ -6,7 +6,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div style = "padding-bottom:5px; text-align:right;">
+            @can('viewAny', auth()->user())
             <button class="btn btn-outline-info" onclick = "location.href = '/allplayer'" style = "float:left">All Players</button>
+            @endcan
             <button type = "submit" class="Add_Game btn btn-primary" data-toggle="modal" data-target="#addgame">Add Game</button>
             </div>
             <div class="card">

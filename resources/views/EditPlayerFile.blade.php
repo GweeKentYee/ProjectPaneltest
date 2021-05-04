@@ -12,7 +12,7 @@
             <br>
             <br>
             <div class="modal-header">
-                <h4>Old File: <a href = "/playerfile/view/{{$players->game->id}}/{{$playerfile->id}}">{{$playerfile->JSON_file}}</a></h4>
+                <h4>Old File: <a href = "/playerfile/view/{{$players->game->id}}/{{$playerfile->id}}">{{$playerfile->file}}</a></h4>
              </div>
                 <div class="modal-body">
                     <div class="playerfile">
@@ -24,8 +24,8 @@
                                     </span>
                             @enderror
                         <br> --}}
-                        <label>JSON/Txt file:</label>
-                        <input type = "file" name = "json/txt" id = "playerjson" class = "form-control-file @error('json/txt') is-invalid @enderror" accept = "application/JSON, text/plain"> 
+                        <label>File ( JSON, XML, Txt, PNG, JPEG ):</label>
+                        <input type = "file" name = "json/txt" id = "playerjson" class = "form-control-file @error('json/txt') is-invalid @enderror" accept = "application/JSON,application/xml,text/plain,text/xml,image/png,image/jpeg"> 
                             @error('json/txt')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class PlayersController extends Controller
 {
@@ -20,6 +21,8 @@ class PlayersController extends Controller
 
         $this->middleware('auth');
     }
+
+    //API
     
     public function index()
     {
@@ -46,11 +49,13 @@ class PlayersController extends Controller
 
         $data = request()->validate([
             'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$request['games_id']],
+            'password' => ['required', 'string', 'min:8'],
             'games_id' => ['required','exists:games,id']   
         ]);
 
         return player::create([
             "player_name" => $data["player_name"],
+            'password' => Hash::make($data['password']),
             "games_id" => $data["games_id"],
         ]);
 
@@ -123,13 +128,21 @@ class PlayersController extends Controller
 
     }
 
+    //Admin Panel
+
     public function AllPlayerPage(){
+
+        //Show All Players Page
+
+        $this->authorize('viewAny', auth()->user());
 
         return view('AllPlayers');
 
     }
 
     public function display($id){
+
+        //Show Players Page (According to game)
 
         $games = Game::findorfail($id);
 
@@ -158,30 +171,14 @@ class PlayersController extends Controller
 
         //Create a player (Panel)
 
-        // $game = Game::findorfail($id);
-
-        // $modelname = str_replace(' ', '',$game->game_name);
-
-        // $tablename = lcfirst(str_replace(' ', '_',$game->game_name));
-
-        // $model = "App\\Models\\".$modelname;
-
-        // $data = request()->validate([
-        //     'player_name' => ['required', 'unique:'.$tablename.',player_name,NULL,id'],
-        // ]);
-
-        // $model::create([
-        //     'player_name' => $data['player_name'],
-        //     'games_id' => $id
-        // ]);
-        // return redirect('/game/' . $id);
-
         $data = request()->validate([
             'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$id],
+            'player_password' => ['required', 'string', 'min:8'],
         ]);
         
         Player::create([
             'player_name' => $data['player_name'],
+            'password' => Hash::make($data['player_password']),
             'games_id' => $id
         ]);
         return redirect('/game/' . $id);
@@ -191,10 +188,6 @@ class PlayersController extends Controller
     public function delete($playerID){
 
         //Delete a player (Panel) - *Player folder will be deleted*
-        
-        // $modelname = str_replace(' ', '',$gameID->game_name);
-
-        // $model = "App\\Models\\".$modelname;
 
         $players = Player::find($playerID);
 

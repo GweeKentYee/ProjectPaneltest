@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-9">
+        <div class="col-md-10">
             <h3><a href ="/game/{{$games->id}}">{{$games->game_name}}</a>{{' / '.$players->player_name}}</h3>
             <div style = "text-align:right" class = "pb-1">
                 <button class = "btn btn-primary"  data-toggle="modal" data-target="#addfile">Add File</button>
@@ -12,7 +12,8 @@
             <table class = "table" id = "datatable">
                 <thead>
                     <tr>
-                        <th>JSON/Txt file</th>
+                        <th>File ID</th>
+                        <th>File</th>
                         <th>Type</th>
                         <th>Api</th>
                         <th>Action</th>
@@ -39,8 +40,8 @@
                 @csrf
                     <div class="modal-body">
                         <div class="playerfile">
-                            <label> JSON/Txt file:</label>
-                            <input type = "file" name = "json/txt" id = "playerjson" class = "form-control-file @error('json/txt') is-invalid @enderror" accept = "application/JSON, text/plain"> 
+                            <label>File ( JSON, XML, Txt, PNG, JPEG ):</label>
+                            <input type = "file" name = "json/txt" id = "playerjson" class = "form-control-file @error('json/txt') is-invalid @enderror" accept = "application/JSON,application/xml,text/plain,text/xml,image/png,image/jpeg"> 
                                 @error('json/txt')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -117,7 +118,8 @@
                 "serverSide": true,
                 "ajax": "{{ route('api.playerFile', [$games->id, $players->id])}}",
                 "columns": [
-                    {"data": "JSON_file"},
+                    {"data": "id"},
+                    {"data": "File"},
                     {"data": "type"},
                     {"data": "Api", orderable: false, searchable: false},
                     {"data": "Action", orderable: false, searchable: false}
@@ -138,7 +140,7 @@
 
             $('#datatable').on('click','.path', function(){
                 var modal = $('#url');
-                modal.find('#fileURL').val("http://188.166.221.242/api/playerfile/read/" + $(this).data('path'));
+                modal.find('#fileURL').val("http://188.166.221.242/api/playerfile/read/" + "{{ $games->id }}/" + $(this).data('path'));
             })
         });
     </script>

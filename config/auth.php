@@ -45,6 +45,11 @@ return [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
+
+        'api_player' => [
+            'driver' => 'sanctum',
+            'provider' => 'players',
+        ]
     ],
 
     /*
@@ -69,6 +74,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
+        'players' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\PlayerAuth::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

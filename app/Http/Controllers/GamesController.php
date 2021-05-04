@@ -22,6 +22,8 @@ class GamesController extends Controller
 
     }
 
+    //API
+
     public function index()
     {
         //Show all games (API)
@@ -49,7 +51,30 @@ class GamesController extends Controller
             'game_name' => ['required','unique:games,game_name']
         ]);
 
-        return Game::create($data);
+        $GameTable = lcfirst(str_replace(' ','_',$data['game_name']));
+
+        if (!Schema::hasTable($GameTable)) {
+            Schema::create($GameTable, function (Blueprint $table) {
+                $table->id();
+                $table->string('file')->required();
+                $table->string('type')->nullable();
+                $table->unsignedBigInteger('players_id')->required();
+                $table->timestamps();
+
+                $table->foreign('players_id')->references('id')->on('players')->onDelete('cascade');
+                $table->index('players_id');
+            });
+        }   
+
+        $GameModelName = str_replace(' ', '',$data['game_name']);
+
+        Artisan::call('krlove:generate:model '.$GameModelName.' --table-name='.$GameTable.'');
+        Artisan::call('krlove:generate:model Player --table-name="players"');
+
+        return Game::create([
+            'game_name' => $data['game_name'],
+            'users_id' => Auth::guard('api')->id(),
+        ]);
 
     }
 
@@ -76,7 +101,25 @@ class GamesController extends Controller
 
         $game = Game::find($data['games_id']);
 
-        $path = public_path('storage/uploads/'.$game->game_name);
+        $gamename = $game->game_name;
+
+        $GameTable = lcfirst(str_replace(' ','_',$gamename));
+
+        $modelname = str_replace(' ','',$gamename);
+
+        $GameModel = app_path("/Models/".$modelname.".php");
+
+        if(file_exists($GameModel)){
+
+                unlink($GameModel);
+
+        }
+
+        Schema::dropIfExists(''.$GameTable.'');
+
+        Artisan::call('krlove:generate:model Player --table-name="players"');
+
+        $path = public_path('storage/uploads/'.$gamename);
 
         File::deleteDirectory($path);
 
@@ -86,6 +129,8 @@ class GamesController extends Controller
         return response($response, 200);  
 
     }
+
+    //Admin Panel
 
     public function add(){
 
@@ -101,7 +146,7 @@ class GamesController extends Controller
             Schema::create($GameTable, function (Blueprint $table) {
 
                 $table->id();
-                $table->string('JSON_file')->required();
+                $table->string('file')->required();
                 $table->string('type')->nullable();
                 $table->unsignedBigInteger('players_id')->required();
                 $table->timestamps();

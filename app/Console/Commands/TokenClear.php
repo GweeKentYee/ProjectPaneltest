@@ -38,6 +38,6 @@ class TokenClear extends Command
      */
     public function handle()
     {
-        DB::table('personal_access_tokens')->where('last_used_at', '<', now()->subMinute(5))->delete();
+        DB::table('personal_access_tokens')->where('updated_at', '<', now()->subMinute(5))->delete();
     }
 }

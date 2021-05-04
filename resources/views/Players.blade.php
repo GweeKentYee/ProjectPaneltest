@@ -14,6 +14,7 @@
             <table class = "table" id = "datatable">
                 <thead>
                     <tr>
+                        <th>Player ID</th>
                         <th>Player name</th>
                         <th>Action</th>
                     </tr>
@@ -42,6 +43,14 @@
                             <label>Player name:</label>
                             <input id="playername" name = "player_name" type="text" class="form-control @error('player_name') is-invalid @enderror" value = "{{ old('player_name') }}" autocomplete="off" autofocus>
                                 @error('player_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                @enderror
+                            <br>
+                            <label>Password:</label>
+                            <input id="playerpassword" name = "player_password" type="text" class="form-control @error('player_password') is-invalid @enderror" value = "{{ old('player_password') }}" autocomplete="off" autofocus>
+                                @error('player_password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -77,6 +86,7 @@
                 "serverSide": true,
                 "ajax": "{{ route('api.players.index', $games->id)}}",
                 "columns": [
+                    {"data": "id"},
                     {"data": "player_name"},
                     {"data": "Action", orderable: false, searchable: false}
                 ]

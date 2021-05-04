@@ -61,14 +61,12 @@
                                     <a class="dropdown-item" href="/servermonitor">
                                         {{ __('Server Monitoring') }}
                                     </a>
+                                    @can('viewAny', auth()->user())
+                                        <a class="dropdown-item" href="/account">
+                                            {{ __('Manage Sub-Accounts') }}
+                                        </a>
+                                    @endcan
 
-                                    @if (Auth::user()->is_admin == '1')
-                                        @if (Route::has('register'))
-                                            <a class="dropdown-item" href="/register">
-                                                {{ __('Register Sub-Account') }}
-                                            </a>
-                                        @endif
-                                    @endif 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">

@@ -17,6 +17,7 @@ class CreatePlayersTable extends Migration
             $table->id();
             $table->string('player_name')->required();
             $table->unsignedBigInteger('games_id')->required();
+            $table->string('password')->required();
             $table->timestamps();
 
             $table->foreign('games_id')->references('id')->on('games')->onDelete('cascade');

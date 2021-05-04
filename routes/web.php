@@ -20,8 +20,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/servermonitor', 'App\Http\Controllers\ServerMonitorController@disk_total');
 Route::post('/registernew','App\Http\Controllers\Auth\RegisterController@register');
 
-// Auth::routes(['register' => false]);
-Auth::routes();
+Route::get('/account', 'App\Http\Controllers\Auth\AccountController@viewPage');
+Route::get('/account/delete/{userID}', 'App\Http\Controllers\Auth\AccountController@delete');
+Route::get('/account/games/{userID}', 'App\Http\Controllers\Auth\AccountController@accountGamesPage');
+Route::get('/account/game/delete/{userID}/{gameID}', 'App\Http\Controllers\Auth\AccountController@deleteAccountGames');
+
+Auth::routes(['register' => false]);
+// Auth::routes();
 
 Route::post('/game/add', 'App\Http\Controllers\GamesController@add');
 Route::delete('/game/remove','App\Http\Controllers\GamesController@remove');

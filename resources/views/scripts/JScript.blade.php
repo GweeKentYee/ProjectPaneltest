@@ -12,6 +12,10 @@
             $('#addfile').modal({show:true});
         })
 
+        $(document).ready(function(){
+            $('#registerSubAccount').modal({show:true});
+        })
+
     </script>
 
 @endif

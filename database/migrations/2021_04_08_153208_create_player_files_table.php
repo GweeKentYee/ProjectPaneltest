@@ -15,7 +15,7 @@ class CreatePlayerFilesTable extends Migration
     {
         Schema::create('player_files', function (Blueprint $table) {
             $table->id();
-            $table->string('JSON_file')->required();
+            $table->string('file')->required();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('players_id')->required();
             $table->timestamps();

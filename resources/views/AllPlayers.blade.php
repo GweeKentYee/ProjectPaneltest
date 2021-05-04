@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <h3>All Players</h3>
             <div style = "text-align:right" class = "pb-1">
                 <button class = "btn btn-primary"  data-toggle="modal" data-target="#gamelist">Game list</button>
@@ -12,6 +12,7 @@
             <table class = "table" id = "datatable">
                 <thead>
                     <tr>
+                        <th>Player ID</th>
                         <th>Player name</th>
                         <th>Game ID</th>
                         <th>Action</th>
@@ -65,6 +66,7 @@
             "serverSide": true,
             "ajax": "{{ route('api.allplayers')}}",
             "columns": [
+                {"data": "id"},
                 {"data": "player_name"},
                 {"data": "games_id"},
                 {"data": "Action", orderable: false, searchable: false}

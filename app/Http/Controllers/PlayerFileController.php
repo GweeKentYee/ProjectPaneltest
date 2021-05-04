@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\PlayerFile;
+use App\Models\Batman;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PlayerFileController extends Controller
 {
@@ -18,12 +21,31 @@ class PlayerFileController extends Controller
         $this->middleware('auth');
 
     }
-
+    
+    //API
+    
     public function index()
     {
-        //Show all player files (API)
 
-        $playerfile = PlayerFile::all();
+    }
+
+    public function withGameID(Request $request){
+        
+        //Show player files with game ID (API)
+
+        $data = $request->validate([
+            'games_id' => ['required','exists:games,id']   
+        ]);
+
+        $game = Game::find($data['games_id']);
+
+        $gamefile = $game->game_name;
+
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $playerfile = $GameModel::all();
 
         if ($playerfile->isEmpty()){
             
@@ -35,7 +57,6 @@ class PlayerFileController extends Controller
             return $playerfile;
 
         }
-
     }
 
     public function store(Request $request)
@@ -43,12 +64,11 @@ class PlayerFileController extends Controller
         //Store new player file (API)
 
         $data = request()->validate([
-            'player_file' => ['mimetypes:application/json,text/plain', 'required'],
-            'type' => ['required', 'unique:player_files,type,NULL,id,players_id,' .$request['player_id']],
+            'player_file' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
             'player_id' => ['required', 'exists:players,id']
         ]);
 
-        $player = player::find($request['player_id']);
+        $player = Player::find($request['player_id']);
 
         $playername = $player->player_name;
 
@@ -56,14 +76,25 @@ class PlayerFileController extends Controller
 
         $gamefile = $game->game_name;
 
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+
+        $data2 = request()->validate([
+            'type' => ['required', 'unique:'.$GameTable.',type,NULL,id,players_id,' .$request['player_id']],
+        ]);
+
         $directory = $gamefile . '/' . $playername;
+
         $filename = request()->file('player_file')->getClientOriginalName();
 
         $filepath = request('player_file')->move('storage/uploads/' . $directory ,$filename);
         
-        return PlayerFile::create([
-            'JSON_file' => str_replace('\\','/',$filepath),
-            'type' => request('type'),
+        return $GameModel::create([
+            'file' => str_replace('\\','/',$filepath),
+            'type' => $data2['type'],
             'players_id' => $data['player_id']
         ]);
 
@@ -77,13 +108,19 @@ class PlayerFileController extends Controller
             'player_id' => ['required','exists:players,id']   
         ]);
         
-        $players = player::find($data["player_id"]);
+        $players = Player::find($data["player_id"]);
 
-        $playerfiles = $players->PlayerFile;
+        $game = $players->game;
+
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+        
+        $playerfiles = $GameModel::all()->where('players_id', $data['player_id']);
 
         if ($playerfiles->isEmpty()){
             
-            $response = ['message' =>  'No player avaliable.'];
+            $response = ['message' =>  'No player file avaliable.'];
             return response($response, 200);
             
         } else {
@@ -94,52 +131,74 @@ class PlayerFileController extends Controller
 
     }
 
-    public function showSingle(Request $request)
-    {
-        //Show player file with file ID (API)
-
-        $data = $request->validate([
-            'file_id' => ['required', 'exists:player_files,id']
-        ]);
-
-        return PlayerFile::find($data['file_id']);
-        
-    }
-
     public function update(Request $request)
     {
         //Update player file (API) - *Replacing the player file*
 
         $data = $request->validate([
-            'file_id' => ['required', 'exists:player_files,id'],
-            'player_file' => ['mimetypes:application/json,text/plain', 'required']
+            'player_id' =>  ['required','exists:players,id'],  
         ]);
 
-        $playerfile = PlayerFile::find($data['file_id']);
-
-        $data2 = $request->validate([
-            'type' => ['required', 'unique:player_files,type,'.$request['file_id'].',id,players_id,' .$playerfile->players_id]
-        ]);
-        
-        $player = player::find($playerfile->players_id);
-
-        $playername = $player->player_name;
+        $player = Player::findorfail($data['player_id']);
 
         $game = $player->game;
 
         $gamefile = $game->game_name;
 
-        $directory = $gamefile . '/' . $playername;
-        $filename = request()->file('player_file')->getClientOriginalName();
+        $GameModelName = str_replace(' ', '',$game->game_name);
 
-        $filepath = request('player_file')->move('storage/uploads/' . $directory ,$filename);
-    
-        $playerfile->update([
-            'JSON_file' => str_replace('\\','/',$filepath),
-            'type' => $data2['type']
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+
+        $data2 = $request->validate([
+            'type' => ['required', 'exists:'.$GameTable.',type'],
+            'new_player_file' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
         ]);
-        
-        return $playerfile;
+
+        $playerfileInfo = $GameModel::select('id','file','players_id')->where('type', $data2['type'])->first();
+
+        if (request('new_type')) {
+            
+            $data3 = $request->validate([
+                'new_type' => ['unique:'.$GameTable.',type,'.$request['file_id'].',id,players_id,' .$playerfileInfo->players_id]
+            ]);
+
+            $playername = $player->player_name;
+
+            $directory = $gamefile . '/' . $playername;
+
+            $filename = request()->file('new_player_file')->getClientOriginalName();
+
+            $filepath = request('new_player_file')->move('storage/uploads/' . $directory ,$filename);
+
+            $playerfile = $GameModel::findorfail($playerfileInfo->id);
+
+            $playerfile->update([
+                'file' => str_replace('\\','/',$filepath),
+                'type' => $data3['new_type']
+            ]);
+
+            return $playerfile;
+
+        } else {
+
+            $playername = $player->player_name;
+
+            $directory = $gamefile . '/' . $playername;
+
+            $filename = request()->file('new_player_file')->getClientOriginalName();
+
+            $filepath = request('new_player_file')->move('storage/uploads/' . $directory ,$filename);
+
+            $playerfile = $GameModel::findorfail($playerfileInfo->id);
+
+            $playerfile->update([
+                'file' => str_replace('\\','/',$filepath),
+            ]);
+
+            return $playerfile;
+        }
 
     }
 
@@ -148,25 +207,41 @@ class PlayerFileController extends Controller
         //Delete a player file (API) - *Player file will be deleted according to File ID*
 
         $data = $Request->validate([
-            'file_id' => ['required', 'exists:player_files,id']
+            'player_id' =>  ['required','exists:players,id'],  
+        ]);
+        
+        $player = Player::findorfail($data['player_id']);
+
+        $game = $player->game;
+
+        $gamefile = $game->game_name;
+
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+
+        $data2 = $Request->validate([
+            'type' => ['required', 'exists:'.$GameTable.',type'],
         ]);
 
-        $playerfile = PlayerFile::find($data['file_id']);
+        $playerfile = $GameModel::select('file')->where('type', $data2['type'])->first();
 
-        $file = $playerfile->JSON_file;
+        $file = $playerfile->file;
 
         $filepath = str_replace('\\','/',public_path($file));
 
         if(file_exists($filepath)){
 
             unlink($filepath);
-            PlayerFile::where('id', $data['file_id'])->delete();
+            $GameModel::where('type', $data2['type'])->delete();
 
             $response = ['message' => 'Player file deleted successfully.'];
             return response($response, 200);
 
         } else{
-            PlayerFile::where('id', $data['file_id'])->delete();
+            $GameModel::where('type', $data2['type'])->delete();
 
             $response = ['message' => 'Player file deleted successfully.'];
             return response($response, 200);
@@ -180,33 +255,70 @@ class PlayerFileController extends Controller
         //Download a player file (API) 
 
         $data = $request->validate([
-            'file_id' => ['required', 'exists:player_files,id']
+            'player_id' =>  ['required','exists:players,id'],  
+        ]);
+        
+        $player = Player::findorfail($data['player_id']);
+
+        $game = $player->game;
+
+        $gamefile = $game->game_name;
+
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+
+        $data2 = $request->validate([
+            'type' => ['required', 'exists:'.$GameTable.',type'],
         ]);
 
-        $playerfile = PlayerFile::find($data['file_id']);
+        $playerfile = $GameModel::select('file')->where('type', $data2['type'])->first();
 
-        return response()->download($playerfile->JSON_file);
+        return response()->download($playerfile->file);
 
     }
 
-    public function ReadFileApi($id){
+    public function ReadFileApi($gameID, $fileID){
 
         //Read a player file (API)
 
-        $playerfile = PlayerFile::findorfail($id);
+        $game = Game::findorfail($gameID);
 
-        $content = file_get_contents(public_path($playerfile->JSON_file));
+        $gamefile = $game->game_name;
 
-        $data = json_decode($content, true);
-        return $data;
+        $GameModelName = str_replace(' ', '',$game->game_name);
 
+        $GameModel = "App\\Models\\".$GameModelName;
+        
+        $playerfile = $GameModel::findorfail($fileID);
+     
+        $file = public_path($playerfile->file);
+
+        $fileInfo = pathinfo($file);
+
+        if ($fileInfo['extension'] == 'json') {
+
+            $content = file_get_contents($file);
+
+            $data = json_decode($content, true);
+
+            return $data;
+
+        } else {
+
+            return response()->download($file, '', [], 'inline');
+
+        }
+ 
     }
+
+    //Admin Panel
 
     public function PlayerFilePage(Game $gameID, $playerID){
 
-        // $modelname = str_replace(' ', '',$gameID->game_name);
-
-        // $GameModel = "App\\Models\\".$modelname;
+        //Show player file page
 
         $players = Player::findorfail($playerID);
 
@@ -227,8 +339,6 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        // $GamePlayerModel = "App\\Models\\".$GameModelName.'PlayerFiles';
-
         $players = Player::findorfail($playerID);
 
         $game = $players->game;
@@ -238,7 +348,7 @@ class PlayerFileController extends Controller
         $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
 
         $data = request()->validate([
-            'json/txt' => ['mimetypes:application/json,text/plain', 'required'],
+            'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
             'file_type' => ['required','unique:'.$GameTable.',type,NULL,id,players_id,'.$playerID],
         ]);
 
@@ -250,7 +360,7 @@ class PlayerFileController extends Controller
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
 
         $GameModel::create([
-            'JSON_file' => str_replace('\\','/',$filepath),
+            'file' => str_replace('\\','/',$filepath),
             'type' => request('file_type'),
             'players_id' => $playerID
         ]);
@@ -271,12 +381,24 @@ class PlayerFileController extends Controller
 
         $playerfile = $GameModel::findorfail($fileID);
 
-        $content = file_get_contents(public_path($playerfile->JSON_file));
+        $file = public_path($playerfile->file);
 
-        $data = json_decode($content, true);
+        $fileInfo = pathinfo($file);
+
+        if ($fileInfo['extension'] == 'json') {
+
+            $content = file_get_contents($file);
+
+            $data = json_decode($content, true);
+
+            return $data;
+
+        } else {
+
+            return response()->download($file, '', [], 'inline');
+
+        }
         
-        return $data;
-
     }
 
     public function download($file1,$file2,$file3,$file4,$file5){
@@ -290,6 +412,8 @@ class PlayerFileController extends Controller
     }
 
     public function editPage($gameID, $fileID){
+
+        //Show edit player file page
         
         $game = Game::find($gameID);
 
@@ -331,7 +455,7 @@ class PlayerFileController extends Controller
         $gamefile = $game->game_name;
 
         $data = request()->validate([
-            'json/txt' => ['required', 'mimetypes:application/json,text/plain'],
+            'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
             'file_type' => ['required', 'unique:'.$GameTable.',type,'.$fileID.',id,players_id,' .$playerid], 
         ]);
             
@@ -344,7 +468,7 @@ class PlayerFileController extends Controller
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
         
         $playerfile->update([
-            'JSON_file' => str_replace('\\','/',$filepath),
+            'file' => str_replace('\\','/',$filepath),
             'type' => request('file_type'),
         ]);
 
@@ -355,6 +479,7 @@ class PlayerFileController extends Controller
     public function delete($gameID, $fileID){
 
         //Remove a player file (Panel) - *Player file will be deleted* 
+
         $game = Game::find($gameID);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
@@ -363,7 +488,7 @@ class PlayerFileController extends Controller
 
         $playerfile = $GameModel::findorfail($fileID);
 
-        $file = $playerfile->JSON_file;
+        $file = $playerfile->file;
 
         $filepath = str_replace('\\','/',public_path($file));
 
