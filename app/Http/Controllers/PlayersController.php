@@ -50,13 +50,13 @@ class PlayersController extends Controller
         $data = request()->validate([
             'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$request['games_id']],
             'password' => ['required', 'string', 'min:8'],
-            'games_id' => ['required','exists:games,id']   
+            'game_id' => ['required','exists:games,id']   
         ]);
 
         return player::create([
             "player_name" => $data["player_name"],
             'password' => Hash::make($data['password']),
-            "games_id" => $data["games_id"],
+            "games_id" => $data["game_id"],
         ]);
 
     }
@@ -66,10 +66,10 @@ class PlayersController extends Controller
         //Show players according to game ID (API)
 
         $data = $request->validate([
-            'games_id' => ['required','exists:games,id']   
+            'game_id' => ['required','exists:games,id']   
         ]);
         
-        $game = Game::find($data["games_id"]);
+        $game = Game::find($data["game_id"]);
 
         $players = $game->players;
 

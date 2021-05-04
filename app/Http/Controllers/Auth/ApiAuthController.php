@@ -89,6 +89,7 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',
             'password' => 'required|string|min:6',
+            'game_id' => 'required','exists:games,id'   
         ]);
 
         if ($validator->fails())
@@ -96,7 +97,12 @@ class ApiAuthController extends Controller
             return response(['errors'=>$validator->errors()->all()], 422);
         }
 
-        $user = PlayerAuth::where('player_name', $request->username)->first();
+        $user = PlayerAuth::where([
+            
+            ['player_name', $request->username],
+            ['games_id', $request->game_id]
+
+        ])->first();
 
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
@@ -104,6 +110,7 @@ class ApiAuthController extends Controller
                 $userdata = [
                     'id' => $user['id'],
                     'username' => $user['player_name'],
+                    'games_id' => $user['games_id']
                 ];
                 $response = ['token' => $token];
                 return response(array_merge($userdata,$response), 200);

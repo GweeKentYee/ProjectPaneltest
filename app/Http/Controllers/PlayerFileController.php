@@ -34,10 +34,10 @@ class PlayerFileController extends Controller
         //Show player files with game ID (API)
 
         $data = $request->validate([
-            'games_id' => ['required','exists:games,id']   
+            'game_id' => ['required','exists:games,id']   
         ]);
 
-        $game = Game::find($data['games_id']);
+        $game = Game::find($data['game_id']);
 
         $gamefile = $game->game_name;
 

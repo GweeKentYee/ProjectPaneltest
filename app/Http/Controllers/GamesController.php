@@ -116,10 +116,10 @@ class GamesController extends Controller
         //Show a single game according to ID (API)
 
         $data = $request->validate([
-            'games_id' => ['required','exists:games,id']   
+            'game_id' => ['required','exists:games,id']   
         ]);
 
-        $game = Game::find($data['games_id']);
+        $game = Game::find($data['game_id']);
 
         if (Auth::user()->is_admin == '0'){
 
@@ -145,10 +145,10 @@ class GamesController extends Controller
         //Delete a game according to ID (API) - *Game folder will be deleted*
 
         $data = $request->validate([
-            'games_id' => ['required','exists:games,id']
+            'game_id' => ['required','exists:games,id']
         ]);
 
-        $game = Game::find($data['games_id']);
+        $game = Game::find($data['game_id']);
 
         if (Auth::user()->is_admin == '0'){
 
