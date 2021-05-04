@@ -27,13 +27,11 @@
                         @endif
                         @if (Auth::user()->is_admin == '0')
                             @foreach ($admingames as $admingames)
-                                @foreach ($admingames as $admingames)
                                 <div class = "admin_games_row" >
                                     <label>
                                         <a href = "/game/{{$admingames->id}}">{{ $admingames->game_name }}</a>
                                     </label>
                                 </div>
-                                @endforeach
                             @endforeach
                             @foreach ($AccountGames as $AccountGames)
                             <div class = "games_row" >

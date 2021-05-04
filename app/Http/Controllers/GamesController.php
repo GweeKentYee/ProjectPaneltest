@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Migrations\Migration;
@@ -28,17 +29,49 @@ class GamesController extends Controller
     {
         //Show all games (API)
 
-        $games = Game::all();
+        if (Auth::user()->is_admin == '0'){
+        
+            $admin = User::select('id')->where('is_admin', '1')->get();
 
-        if ($games->isEmpty()){
+            foreach ($admin as $admin){
+
+                $adminID[] = $admin->id;
+        
+            }
             
-            $response = ['message' =>  'No game avaliable.'];
-            return response($response, 200);
+            $admin = collect($adminID);
+
+            $admingames = Game::all()->whereIn('users_id', $admin)->values();
+
+            $AccountGames = Game::all()->where('users_id', Auth::id());
+
+            if ($admingames->isEmpty() && $AccountGames->isEmpty()) {
+                
+                $response = ['message' =>  'No game avaliable.'];
+
+                return response($response, 200);
+
+            } else {
+
+                return response($admingames->merge($AccountGames));
             
+            }
+
         } else {
 
-            return $games;
+            $games = Game::all();
 
+            if ($games->isEmpty()){
+                
+                $response = ['message' =>  'No game avaliable.'];
+
+                return response($response, 200);
+                
+            } else {
+
+                return $games;
+
+            }
         }
 
     }
@@ -87,11 +120,27 @@ class GamesController extends Controller
         ]);
 
         $game = Game::find($data['games_id']);
-        return $game;
+
+        if (Auth::user()->is_admin == '0'){
+
+            if (!$game->User->is_admin == '1'){
+
+                $this->authorize('view', $game);
+
+            }
+
+            return $game;
+
+       } else {
+
+            return $game;
+            
+       }
 
     }
 
     public function destroy(request $request)
+
     {
         //Delete a game according to ID (API) - *Game folder will be deleted*
 
@@ -101,32 +150,69 @@ class GamesController extends Controller
 
         $game = Game::find($data['games_id']);
 
-        $gamename = $game->game_name;
+        if (Auth::user()->is_admin == '0'){
 
-        $GameTable = lcfirst(str_replace(' ','_',$gamename));
+            $this->authorize('view', $game);
 
-        $modelname = str_replace(' ','',$gamename);
+            $gamename = $game->game_name;
 
-        $GameModel = app_path("/Models/".$modelname.".php");
+            $GameTable = lcfirst(str_replace(' ','_',$gamename));
 
-        if(file_exists($GameModel)){
+            $modelname = str_replace(' ','',$gamename);
 
-                unlink($GameModel);
+            $GameModel = app_path("/Models/".$modelname.".php");
 
-        }
+            if(file_exists($GameModel)){
 
-        Schema::dropIfExists(''.$GameTable.'');
+                    unlink($GameModel);
 
-        Artisan::call('krlove:generate:model Player --table-name="players"');
+            }
 
-        $path = public_path('storage/uploads/'.$gamename);
+            Schema::dropIfExists(''.$GameTable.'');
 
-        File::deleteDirectory($path);
+            Artisan::call('krlove:generate:model Player --table-name="players"');
 
-        Game::destroy($data);
+            $path = public_path('storage/uploads/'.$gamename);
 
-        $response = ['message' =>  'Game deleted successfully'];
-        return response($response, 200);  
+            File::deleteDirectory($path);
+
+            Game::destroy($data);
+
+            $response = ['message' =>  'Game deleted successfully'];
+
+            return response($response, 200);  
+
+       } else {
+
+            $gamename = $game->game_name;
+
+            $GameTable = lcfirst(str_replace(' ','_',$gamename));
+
+            $modelname = str_replace(' ','',$gamename);
+
+            $GameModel = app_path("/Models/".$modelname.".php");
+
+            if(file_exists($GameModel)){
+
+                    unlink($GameModel);
+
+            }
+
+            Schema::dropIfExists(''.$GameTable.'');
+
+            Artisan::call('krlove:generate:model Player --table-name="players"');
+
+            $path = public_path('storage/uploads/'.$gamename);
+
+            File::deleteDirectory($path);
+
+            Game::destroy($data);
+
+            $response = ['message' =>  'Game deleted successfully'];
+
+            return response($response, 200);  
+            
+       }
 
     }
 
@@ -176,13 +262,9 @@ class GamesController extends Controller
 
         $checked = $Request->remove_game;
 
-        $checkedvalue = $Request->remove_game;
-        
-        foreach ($checked as $checked){
+        $gameID = collect($checked);
 
-            $game[] = Game::find($checked); 
-
-        }  
+        $game = Game::find($gameID);
 
         foreach ($game as $game){
 
@@ -210,11 +292,7 @@ class GamesController extends Controller
 
         }
 
-        foreach ($checkedvalue as $checkedvalue){
-
-            Game::where('id',$checkedvalue)->delete();
-
-        }
+        Game::whereIn('id',$gameID)->delete();
 
         return redirect('/home');
 

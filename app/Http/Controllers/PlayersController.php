@@ -181,6 +181,7 @@ class PlayersController extends Controller
             'password' => Hash::make($data['player_password']),
             'games_id' => $id
         ]);
+        
         return redirect('/game/' . $id);
 
     }

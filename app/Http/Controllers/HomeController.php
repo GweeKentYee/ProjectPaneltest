@@ -36,11 +36,9 @@ class HomeController extends Controller
         
             }
 
-            foreach ($adminID as $adminID){
+            $admin = collect($adminID);
 
-                $admingames[] = Game::all()->where('users_id', $adminID);
-
-            }
+            $admingames = Game::all()->whereIn('users_id', $admin);
 
             $AccountGames = Game::all()->where('users_id', Auth::id());
 
@@ -52,6 +50,7 @@ class HomeController extends Controller
         } else {
 
             $games = Game::all();
+
             return view('home',[
                 'games' => $games
             ]);
