@@ -267,7 +267,7 @@ class GamesController extends Controller
             'game_name' => ['required', 'unique:games']
         ]);
         
-        $GameTable = lcfirst(str_replace(' ','_',$data['game_name']));
+        $GameTable = strtolower(str_replace(' ','_',$data['game_name']));
 
         if (!Schema::hasTable($GameTable)) {
             Schema::create($GameTable, function (Blueprint $table) {
