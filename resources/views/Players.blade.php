@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
                 
-            <h3>{{ $games->game_name }}</h3>
+            <h3><a href ="/game/{{$games->id}}">{{ $games->game_name}}</a>{{' / Players'}}</h3>
 
             <div style = "padding-bottom:5px; text-align:right;">
                 <button type = "submit" class="Add_Player btn btn-primary" data-toggle="modal" data-target="#addplayer">Add Player</button>
@@ -97,7 +97,7 @@
         $(document).ready(function () { 
             $('#datatable').on('click', '.delete', function () { 
 
-                var confirmation = confirm('Delete the record?');
+                var confirmation = confirm('Delete the player?');
     
                 if (confirmation == false){
                 return false;

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property User $user
+ * @property GameDataType[] $gameDataTypes
  * @property Player[] $players
  */
 class Game extends Model
@@ -33,6 +34,14 @@ class Game extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'users_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function gameDataTypes()
+    {
+        return $this->hasMany('App\Models\GameDataType', 'games_id');
     }
 
     /**

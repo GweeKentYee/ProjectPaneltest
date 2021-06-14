@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\GameDataType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -90,7 +91,7 @@ class GamesController extends Controller
             Schema::create($GameTable, function (Blueprint $table) {
                 $table->id();
                 $table->string('file')->required();
-                $table->string('type')->nullable();
+                $table->string('type')->required();
                 $table->unsignedBigInteger('players_id')->required();
                 $table->timestamps();
 
@@ -218,6 +219,46 @@ class GamesController extends Controller
 
     //Admin Panel
 
+    public function display($id){
+
+        //Show Game Data Page (According to game)
+
+        $games = Game::findorfail($id);
+
+        $gameDataOneLayer = GameDataType::all()->where('games_id', $games->id)->where('layer','single');
+
+        $gameDataTwoLayer = GameDataType::all()->where('games_id', $games->id)->where('layer','double');
+
+        if (Auth::user()->is_admin == '0'){
+
+            if (!$games->User->is_admin == '1'){
+
+                $this->authorize('view', $games);
+            }
+
+        return view('Game',[
+            'games'=> $games,
+            'gamedataOneLayer' => $gameDataOneLayer,
+            'gamedataTwoLayer' => $gameDataTwoLayer,
+            'gamedataOneLayerList' => $gameDataOneLayer,
+            'gamedataTwoLayerList' => $gameDataTwoLayer,
+
+        ]);
+
+       } else {
+
+            return view('Game',[
+                'games'=> $games,
+                'gamedataOneLayer' => $gameDataOneLayer,
+                'gamedataTwoLayer' => $gameDataTwoLayer,
+                'gamedataOneLayerList' => $gameDataOneLayer,
+                'gamedataTwoLayerList' => $gameDataTwoLayer,
+             ]);
+
+       }
+
+    }
+
     public function add(){
 
         //Create a game (Panel)
@@ -225,7 +266,7 @@ class GamesController extends Controller
         $data = request()->validate([
             'game_name' => ['required', 'unique:games']
         ]);
-
+        
         $GameTable = lcfirst(str_replace(' ','_',$data['game_name']));
 
         if (!Schema::hasTable($GameTable)) {
@@ -233,7 +274,7 @@ class GamesController extends Controller
 
                 $table->id();
                 $table->string('file')->required();
-                $table->string('type')->nullable();
+                $table->string('type')->required();
                 $table->unsignedBigInteger('players_id')->required();
                 $table->timestamps();
 
@@ -270,19 +311,57 @@ class GamesController extends Controller
 
             $gamename = $game->game_name;
 
-            $GameTable = lcfirst(str_replace(' ','_',$gamename));
+            $GameTable = strtolower(lcfirst(str_replace(' ','_',$gamename)));
 
             $modelname = str_replace(' ','',$gamename);
 
-            $GameModel = app_path("/Models/".$modelname.".php");
+            $GameModel = app_path("Models/".$modelname);
 
-            if(file_exists($GameModel)){
+            $GameModelFile = app_path("Models/".$modelname.'.php');
 
-                 unlink($GameModel);
+            $gameDataType = $game->gameDataTypes;
+
+            if(!$gameDataType->isEmpty()){
+
+                foreach ($gameDataType as $gameDataType){
+                
+                    $GameDataTable = $GameTable.'_'.strtolower($gameDataType->data_name);
+    
+                    $GameDataFileTable = $GameDataTable.'_files';
+            
+                    $GameDataModel = $GameModel.str_replace(' ', '',$gameDataType->data_name);
+    
+                    $GameDataFileModel = $GameDataModel."File.php";
+    
+                    if(file_exists($GameDataModel.".php")){
+    
+                        unlink($GameDataModel.".php");
+    
+                    }
+                    
+                    if(file_exists($GameDataFileModel)){
+    
+                        unlink($GameDataFileModel);
+    
+                    }
+    
+                    Schema::dropIfExists(''.$GameDataFileTable.'');
+    
+                    Schema::dropIfExists(''.$GameDataTable.'');
+    
+                }
+
+            } 
+
+            if(file_exists($GameModelFile)){
+
+                 unlink($GameModelFile);
 
             }
 
             Schema::dropIfExists(''.$GameTable.'');
+
+            Artisan::call('krlove:generate:model GameDataType --table-name="game_data_types"');
 
             Artisan::call('krlove:generate:model Player --table-name="players"');
 

@@ -11,19 +11,16 @@
             @method('PATCH')
             <br>
             <br>
+            @if(\Session::has('edit_empty_playerfile'))
+                <div class = "alert alert-danger">
+                    <p>{{ \Session::get('edit_empty_playerfile')}}</p>
+                </div>
+            @endif
             <div class="modal-header">
                 <h4>Old File: <a href = "/playerfile/view/{{$players->game->id}}/{{$playerfile->id}}">{{$playerfile->file}}</a></h4>
              </div>
                 <div class="modal-body">
                     <div class="playerfile">
-                        {{-- <label>Player name:</label>
-                        <input id="playername" name = "player_name" type="text" class="form-control @error('player_name') is-invalid @enderror" value = "{{ old('player_name') ?? $players->player_name }}" autocomplete="off" autofocus>
-                            @error('player_name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
-                        <br> --}}
                         <label>File ( JSON, XML, Txt, PNG, JPEG ):</label>
                         <input type = "file" name = "json/txt" id = "playerjson" class = "form-control-file @error('json/txt') is-invalid @enderror" accept = "application/JSON,application/xml,text/plain,text/xml,image/png,image/jpeg"> 
                             @error('json/txt')
@@ -33,8 +30,8 @@
                             @enderror
                         <br>
                         <label>Type:</label>
-                        <input id="filetype" name = "file_type" type="text" class="form-control @error('file_type') is-invalid @enderror" value = "{{ old('file_type') ?? $playerfile->type }}" autocomplete="off" autofocus>
-                        @error('file_type')
+                        <input id="filetype" name = "type" type="text" class="form-control @error('type') is-invalid @enderror" value = "{{ old('type') ?? $playerfile->type }}" autocomplete="off" autofocus>
+                        @error('type')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -43,7 +40,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" onclick = "Back()">Cancel</button>
-                    <input type="submit" class="btn btn-outline-success" id = "EditSubmit" value="Edit">
+                    <input type="submit" class="btn btn-outline-success" id = "EditPlayerSubmit" value="Edit">
                 </div>
             </form>
         </div>

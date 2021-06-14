@@ -25,7 +25,7 @@ class PlayerFile extends Model
     /**
      * @var array
      */
-    protected $fillable = ['players_id', 'JSON_file', 'type', 'created_at', 'updated_at'];
+    protected $fillable = ['players_id', 'file', 'type', 'created_at', 'updated_at'];
 
     /**
      * Indicates if the model should be timestamped.

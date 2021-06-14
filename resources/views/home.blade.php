@@ -29,7 +29,7 @@
                             @foreach ($admingames as $admingames)
                                 <div class = "admin_games_row" >
                                     <label>
-                                        <a href = "/game/{{$admingames->id}}">{{ $admingames->game_name }}</a>
+                                        <a href = "/game/{{$admingames->id}}" data-toggle="tooltip" data-placement="top" title="Game ID: {{$admingames->id}}">{{ $admingames->game_name }}</a>
                                     </label>
                                 </div>
                             @endforeach
@@ -37,7 +37,7 @@
                             <div class = "games_row" >
                                 <input type = "checkbox" class = "@error('remove_game') is-invalid @enderror"name = "remove_game[]" value = {{$AccountGames->id}} style = "float:right;">
                                 <label for = "remove_game">
-                                    <a href = "/game/{{$AccountGames->id}}">{{ $AccountGames->game_name }}</a>
+                                    <a href = "/game/{{$AccountGames->id}}" data-toggle="tooltip" data-placement="top" title="Game ID: {{$AccountGames->id}}">{{ $AccountGames->game_name }}</a>
                                 </label>
                             </div>
                             @endforeach
@@ -46,7 +46,7 @@
                             <div class = "games_row" >
                                 <input type = "checkbox" class = "@error('remove_game') is-invalid @enderror"name = "remove_game[]" value = {{$games->id}} style = "float:right;">
                                 <label for = "remove_game">
-                                    <a href = "/game/{{$games->id}}">{{ $games->game_name }}</a>
+                                    <a href = "/game/{{$games->id}}" data-toggle="tooltip" data-placement="top" title="Game ID: {{$games->id}}">{{ $games->game_name }}</a>
                                 </label>
                             </div>
                             @endforeach

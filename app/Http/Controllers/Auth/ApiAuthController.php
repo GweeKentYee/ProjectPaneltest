@@ -18,8 +18,8 @@ class ApiAuthController extends Controller
     public function register (Request $request) {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'username' => 'required', 'alpha_dash', 'string', 'max:255' ,'unique:users',
+            'password' => 'required' , 'alpha_dash', 'string', 'min:6' , 'confirmed',
         ]);
 
         if ($validator->fails())
@@ -42,8 +42,8 @@ class ApiAuthController extends Controller
     public function login (Request $request) {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|min:6',
+            'username' => 'required' , 'alpha_dash', 'string', 'max:255',
+            'password' => 'required', 'alpha_dash', 'string', 'min:6',
         ]);
 
         if ($validator->fails())
@@ -84,11 +84,27 @@ class ApiAuthController extends Controller
 
     }
 
+    public function playerRegister(Request $request){
+
+        $data = request()->validate([
+            'player_name' => ['required', 'alpha_dash', 'unique:players,player_name,NULL,id,games_id,'.$request['game_id']],
+            'password' => ['required', 'alpha_dash', 'string', 'min:8'],
+            'game_id' => ['required','exists:games,id']   
+        ]);
+
+        return player::create([
+            "player_name" => $data["player_name"],
+            'password' => Hash::make($data['password']),
+            "games_id" => $data["game_id"],
+        ]);
+
+    }
+
     public function playerLogin (Request $request) {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|min:6',
+            'username' => 'required', 'alpha_dash', 'string', 'max:255',
+            'password' => 'required', 'alpha_dash', 'string', 'min:6',
             'game_id' => 'required','exists:games,id'   
         ]);
 

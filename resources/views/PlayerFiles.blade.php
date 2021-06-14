@@ -5,9 +5,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <h3><a href ="/game/{{$games->id}}">{{$games->game_name}}</a>{{' / '.$players->player_name}}</h3>
+            <h3><a href ="/game/{{$games->id}}">{{$games->game_name}}</a> / <a href = "/game/players/{{$games->id}}">Players</a>{{' / ' .$players->player_name}}</h3>
             <div style = "text-align:right" class = "pb-1">
-                <button class = "btn btn-primary"  data-toggle="modal" data-target="#addfile">Add File</button>
+                <button class = "btn btn-primary"  data-toggle="modal" data-target="#addplayerfile">Add File</button>
             </div>
             <table class = "table" id = "datatable">
                 <thead>
@@ -15,7 +15,7 @@
                         <th>File ID</th>
                         <th>File</th>
                         <th>Type</th>
-                        <th>Api</th>
+                        {{-- <th>Api</th> --}}
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class = "modal fade" id = "addfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class = "modal fade" id = "addplayerfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -121,7 +121,7 @@
                     {"data": "id"},
                     {"data": "File"},
                     {"data": "type"},
-                    {"data": "Api", orderable: false, searchable: false},
+                    // {"data": "Api", orderable: false, searchable: false},
                     {"data": "Action", orderable: false, searchable: false}
                 ]
             });
@@ -138,10 +138,10 @@
                 }
             });
 
-            $('#datatable').on('click','.path', function(){
-                var modal = $('#url');
-                modal.find('#fileURL').val("http://128.199.163.195/api/playerfile/read/" + "{{ $games->id }}/" + $(this).data('path'));
-            })
+            // $('#datatable').on('click','.path', function(){
+            //     var modal = $('#url');
+            //     modal.find('#fileURL').val("http://128.199.163.195/api/playerfile/read/" + "{{ $games->id }}/" + $(this).data('path'));
+            // })
         });
     </script>
     @include('scripts.JScript')

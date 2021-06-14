@@ -48,8 +48,8 @@ class PlayersController extends Controller
         //Create a player (API)
 
         $data = request()->validate([
-            'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$request['games_id']],
-            'password' => ['required', 'string', 'min:8'],
+            'player_name' => ['required', 'alpha_dash', 'unique:players,player_name,NULL,id,games_id,' .$request['game_id']],
+            'password' => ['required', 'alpha_dash', 'string', 'min:8'],
             'game_id' => ['required','exists:games,id']   
         ]);
 
@@ -114,7 +114,7 @@ class PlayersController extends Controller
 
         $playername = $player->player_name;
 
-        $directory = $gamefile . '/' . $playername;
+        $directory = $gamefile . '/Player/' . $playername;
 
         $path = public_path('storage/uploads/'.$directory);
         
@@ -172,8 +172,8 @@ class PlayersController extends Controller
         //Create a player (Panel)
 
         $data = request()->validate([
-            'player_name' => ['required', 'unique:players,player_name,NULL,id,games_id,' .$id],
-            'player_password' => ['required', 'string', 'min:8'],
+            'player_name' => ['required', 'alpha_dash', 'unique:players,player_name,NULL,id,games_id,'.$id],
+            'player_password' => ['required', 'alpha_dash', 'string', 'min:8'],
         ]);
         
         Player::create([
@@ -182,7 +182,7 @@ class PlayersController extends Controller
             'games_id' => $id
         ]);
         
-        return redirect('/game/' . $id);
+        return redirect('/game/players/' . $id);
 
     }
 
@@ -198,7 +198,7 @@ class PlayersController extends Controller
 
         $playername = $players->player_name;
 
-        $directory = $gamefile . '/' . $playername;
+        $directory = $gamefile . '/Player/' . $playername;
 
         $path = public_path('storage/uploads/'.$directory);
         
@@ -206,7 +206,7 @@ class PlayersController extends Controller
 
         Player::where('id', $playerID)->delete();
         
-        return redirect('/game/' .$players->games_id);
+        return redirect('/game/players/' .$players->games_id);
 
     }
 
@@ -222,7 +222,7 @@ class PlayersController extends Controller
 
         $playername = $players->player_name;
 
-        $directory = $gamefile . '/' . $playername;
+        $directory = $gamefile . '/Player/' . $playername;
 
         $path = public_path('storage/uploads/'.$directory);
         

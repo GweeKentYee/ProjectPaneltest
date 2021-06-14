@@ -9,6 +9,7 @@ use App\Models\Batman;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class PlayerFileController extends Controller
@@ -80,13 +81,13 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data2 = request()->validate([
             'type' => ['required', 'unique:'.$GameTable.',type,NULL,id,players_id,' .$request['player_id']],
         ]);
 
-        $directory = $gamefile . '/' . $playername;
+        $directory = $gamefile . '/Player/' . $playername;
 
         $filename = request()->file('player_file')->getClientOriginalName();
 
@@ -166,7 +167,7 @@ class PlayerFileController extends Controller
 
             $playername = $player->player_name;
 
-            $directory = $gamefile . '/' . $playername;
+            $directory = $gamefile . '/Player/' . $playername;
 
             $filename = request()->file('new_player_file')->getClientOriginalName();
 
@@ -185,7 +186,7 @@ class PlayerFileController extends Controller
 
             $playername = $player->player_name;
 
-            $directory = $gamefile . '/' . $playername;
+            $directory = $gamefile . '/Player/' . $playername;
 
             $filename = request()->file('new_player_file')->getClientOriginalName();
 
@@ -345,7 +346,7 @@ class PlayerFileController extends Controller
 
         $gamefile = $game->game_name;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
@@ -354,7 +355,7 @@ class PlayerFileController extends Controller
 
         $playername = $players->player_name;
 
-        $directory = $gamefile . '/' . $playername;
+        $directory = $gamefile . '/Player/' . $playername;
         $filename = request()->file('json/txt')->getClientOriginalName();
 
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
@@ -401,11 +402,11 @@ class PlayerFileController extends Controller
         
     }
 
-    public function download($file1,$file2,$file3,$file4,$file5){
+    public function download($file1,$file2,$file3,$file4,$file5,$file6){
 
         //Download a player file (Panel)
 
-        $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5);
+        $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5 . '/' . $file6);
         
         return response()->download($path);
 
@@ -455,24 +456,48 @@ class PlayerFileController extends Controller
         $gamefile = $game->game_name;
 
         $data = request()->validate([
-            'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
-            'file_type' => ['required', 'unique:'.$GameTable.',type,'.$fileID.',id,players_id,' .$playerid], 
+            'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg'],
+            'type' => ['unique:'.$GameTable.',type,'.$fileID.',id,players_id,' .$playerid], 
         ]);
+
+        $input = collect($data)->filter()->all();
+
+        if(!empty($input)){
             
-        $playername = $players->player_name;
+            if(request('json/txt')){
 
-        $directory = $gamefile . '/' . $playername;
+                $inputWithOutFile = collect($data)->except('json/txt')->filter()->all();
 
-        $filename = request()->file('json/txt')->getClientOriginalName();
+                $playername = $players->player_name;
 
-        $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
-        
-        $playerfile->update([
-            'file' => str_replace('\\','/',$filepath),
-            'type' => request('file_type'),
-        ]);
+                $directory = $gamefile . '/Player/' . $playername;
 
-        return redirect('/playerfile/' . $gameID.'/'.$playerid);
+                $filename = request()->file('json/txt')->getClientOriginalName();
+
+                $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
+
+                $updatepath = [
+                    'file' => str_replace('\\','/',$filepath),
+                ];
+                
+                $updatedata = array_merge($inputWithOutFile, $updatepath);
+
+                $playerfile->update($updatedata);
+
+            } else {
+
+                $playerfile->update($input);
+
+            }
+
+            return redirect('/playerfile/' . $gameID.'/'.$playerid);
+
+        } else {
+
+            Session::flash('edit_empty_playerfile', 'Please fill in at least one field.');
+
+            return redirect('/playerfile/edit/' . $gameID.'/'.$fileID);
+        }
 
     }
 
