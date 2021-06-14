@@ -199,7 +199,7 @@ class DatatableController extends Controller
                 ->addColumn('Action', function($query){
                     
                     //<a class = "btn btn-success btn-sm edit" href = "/playerfile/edit/'.$query->player_id.'">Edit</a>
-                    $actionBtn = '<a href = "/playerfile/download/' .$query->file. '" class = "download btn btn-primary btn-sm">Download</a>
+                    $actionBtn = '<a href = "/data/onelayer/file/download/' .$query->file. '" class = "download btn btn-primary btn-sm">Download</a>
                                     <a class = "btn btn-success btn-sm edit" href = "/data/editpage/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.$query->id.'">Replace</a>
                                     <a class = "btn btn-danger btn-sm delete" href = "/data/onelayer/file/delete/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.$query->id.'">Delete</a>'
                                     ;
@@ -224,7 +224,7 @@ class DatatableController extends Controller
                 ->addColumn('Action', function($query){
                     
                     //<a class = "btn btn-success btn-sm edit" href = "/playerfile/edit/'.$query->player_id.'">Edit</a>
-                    $actionBtn = '<a href = "/playerfile/download/' .$query->file. '" class = "download btn btn-primary btn-sm">Download</a>
+                    $actionBtn = '<a href = "/data/onelayer/file/download/' .$query->file. '" class = "download btn btn-primary btn-sm">Download</a>
                                     <a class = "btn btn-success btn-sm edit" href = "/data/editpage/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.$query->id.'">Replace</a>
                                     <a class = "btn btn-danger btn-sm delete" href = "/data/onelayer/file/delete/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.$query->id.'">Delete</a>'
                                     ;

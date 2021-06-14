@@ -41,6 +41,7 @@ Route::post('/data/onelayer/column/remove/{gameID}/{datatypeID}', 'App\Http\Cont
 Route::post('/data/onelayer/file/add/{gameID}/{datatypeID}', 'App\Http\Controllers\GameDataController@OneLayerAddDataFile');
 Route::get('/data/onelayer/file/view/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataController@OneLayerViewFile');
 Route::get('/data/editpage/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataController@EditPage');
+Route::get('/data/onelayer/file/download/{file1}/{file2}/{file3}/{file4}/{file5}', 'App\Http\Controllers\GameDataController@OneLayerDownloadFile');
 Route::patch('/data/onelayer/file/edit/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataController@OneLayerEdit');
 Route::get('/data/onelayer/file/delete/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataController@OneLayerDeleteDataFile');
 

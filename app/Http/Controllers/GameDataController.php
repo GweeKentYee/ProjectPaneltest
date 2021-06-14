@@ -367,6 +367,14 @@ class GameDataController extends Controller
             ]);
     }
 
+    public function OneLayerDownloadFile($file1,$file2,$file3,$file4,$file5){
+
+        $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5);
+        
+        return response()->download($path);
+
+    }
+
     public function OneLayerEdit($gameID, $datatypeID, $dataID)
     {
         $game = Game::find($gameID);
