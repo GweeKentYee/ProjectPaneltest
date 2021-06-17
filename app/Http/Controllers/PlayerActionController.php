@@ -135,11 +135,7 @@ class PlayerActionController extends Controller
 
         $player = Player::find(auth('api_player')->user()->id);
 
-        $playername = $player->player_name;
-
         $game = $player->game;
-
-        $gamefile = $game->game_name;
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -179,14 +175,15 @@ class PlayerActionController extends Controller
         //Read others player file (Require playerID and type)
 
         $data = $request->validate([
-            'player_id' =>  ['required','exists:players,id'],  
+            'player_id' =>  ['required',
+            Rule::exists('players','id')->where(function ($query) {
+                return $query->where('games_id', auth('api_player')->user()->games_id);
+            }),],  
         ]);
-        
-        $player = Player::findorfail($data['player_id']);
+
+        $player = Player::find(auth('api_player')->user()->id);
 
         $game = $player->game;
-
-        $gamefile = $game->game_name;
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -195,10 +192,13 @@ class PlayerActionController extends Controller
         $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
 
         $data2 = $request->validate([
-            'type' => ['required', 'exists:'.$GameTable.',type'],
+            'type' => ['required', 
+            Rule::exists(''.$GameTable.'','type')->where(function ($query) {
+                return $query->where('players_id', request('player_id'));
+            }),],
         ]);
 
-        $playerfile = $GameModel::select('file')->where('type', $data2['type'])->first();
+        $playerfile = $GameModel::select('file')->where('type', $data2['type'])->where('players_id',$data['player_id'])->first();
      
         $file = public_path($playerfile->file);
 
@@ -224,11 +224,7 @@ class PlayerActionController extends Controller
     {
         //Read random player file (Require type)
 
-        $player = Player::inRandomOrder()->first();
-
-        $game = $player->game;
-
-        $gamefile = $game->game_name;
+        $game = Game::findorfail(auth('api_player')->user()->games_id);
 
         $GameModelName = str_replace(' ', '',$game->game_name);
 
@@ -243,9 +239,8 @@ class PlayerActionController extends Controller
         $playerfile = $GameModel::select('file')->where([
 
             ['type', $data['type']],
-            ['players_id', $player->id]
 
-        ])->first();
+        ])->inRandomOrder()->first();
      
         $file = public_path($playerfile->file);
 
@@ -317,15 +312,13 @@ class PlayerActionController extends Controller
         $data = $request->validate([
             'data_id' => ['required',
                 Rule::exists('game_data_types','id')->where(function ($query) {
-                    return $query->where('player_related', '0')->where('layer','single');
+                    return $query->where('player_related', '0')->where('layer','single')->where('games_id',auth('api_player')->user()->games_id);
                 })
             ],
             'column' => ['required']
         ]);
 
-        $player = Player::find(auth('api_player')->user()->id);
-
-        $game = $player->game;
+        $game = Game::findorfail(auth('api_player')->user()->games_id);
 
         $gameDataType = GameDataType::find($data['data_id']);
 
@@ -385,15 +378,13 @@ class PlayerActionController extends Controller
         $data = $request->validate([
             'data_id' => ['required',
                 Rule::exists('game_data_types','id')->where(function ($query) {
-                    return $query->where('player_related', '0')->where('layer','double');
+                    return $query->where('player_related', '0')->where('layer','double')->where('games_id',auth('api_player')->user()->games_id);
                 })
             ],
             'column' => ['required']
         ]);
-        
-        $player = Player::find(auth('api_player')->user()->id);
 
-        $game = $player->game;
+        $game = Game::findorfail(auth('api_player')->user()->games_id);
 
         $gameDataType = GameDataType::find($data['data_id']);
 
@@ -421,7 +412,6 @@ class PlayerActionController extends Controller
 
             $data2 = $request->validate([
                 $data['column'] => ['required', 'exists:'.$GameDataTable.','.$data['column'].''],
-                'file_type' => ['required', 'exists:'.$GameDataFileTable.',type']
             ]);
 
         } else {
@@ -431,18 +421,20 @@ class PlayerActionController extends Controller
             return response($response, 200);
         }
 
-        // $data2 = $request->validate([
-        //     $special_columns => ['required', 'exists:'.$GameDataTable.','.$special_columns.''],
-        //     'file_type' => ['required', 'exists:'.$GameDataFileTable.',type']
-        // ]);
-
         $gamedata = $GameDataModel::select('id')->where($data['column'],$data2[$data['column']])->first();
 
         $foreigncolumn = strtolower(str_replace(' ','_',$gameDataType->data_name)).'_id';
+
+        $data3 = $request->validate([
+            'file_type' => ['required',
+            Rule::exists(''.$GameDataFileTable.'','type')->where(function ($query) use ($foreigncolumn, $gamedata) {
+                return $query->where(''.$foreigncolumn.'',$gamedata->id);
+            })]
+        ]);
         
         $datafile = $GameDataFileModel::select('file')->where([
 
-            ['type', $data2['file_type']],
+            ['type', $data3['file_type']],
             [$foreigncolumn, $gamedata->id]
 
         ])->first();

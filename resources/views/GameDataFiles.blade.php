@@ -104,6 +104,8 @@
                 @method('PATCH')
                     <div class="modal-body">
                         <div class="datafile">
+                            <label>*Note: The column folder will only work if there is a new file chosen*</label>
+                            <hr>
                             @if(\Session::has('edit_empty_datafile'))
                                 <div class = "alert alert-danger">
                                     <p>{{ \Session::get('edit_empty_datafile')}}</p>

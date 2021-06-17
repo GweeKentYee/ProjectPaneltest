@@ -38,7 +38,7 @@
                         @endforeach
                         @if(in_array("Players_id", $checking))
                             <label>players_id</label>
-                            <input name = "players_id" type="text" class="form-control @error('players_id') is-invalid @enderror" value = "{{ old('players_id') ?? $gamedata->players_id}}" autocomplete="off" autofocus>
+                            <input name = "players_id" type="text" class="form-control @error('players_id') is-invalid @enderror" value = "{{ old('players_id') }}" placeholder ="{{ $gamedata->players_id }}" autocomplete="off" autofocus>
                                 @error('players_id')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

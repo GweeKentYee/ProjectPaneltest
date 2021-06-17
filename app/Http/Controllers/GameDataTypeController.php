@@ -48,7 +48,7 @@ class GameDataTypeController extends Controller
                         $table->id();
                         $table->string(strtolower(str_replace(' ','_',request('column_name'))))->required();
                         $table->string('file')->required();
-                        $table->unsignedBigInteger('players_id')->required()->unique();
+                        $table->unsignedBigInteger('players_id')->required();
                         $table->unsignedBigInteger('data_id')->required();
                         $table->timestamps();
 
@@ -86,7 +86,7 @@ class GameDataTypeController extends Controller
 
                         $table->id();
                         $table->string(strtolower(str_replace(' ','_',request('column_name'))))->required();
-                        $table->unsignedBigInteger('players_id')->required()->unique();
+                        $table->unsignedBigInteger('players_id')->required();
                         $table->unsignedBigInteger('data_id')->required();
                         $table->timestamps();
 

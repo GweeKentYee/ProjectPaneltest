@@ -97,13 +97,13 @@
                                     </span>
                                 @enderror
                             <br>
-                            <input type="checkbox" name="player_related" id = "playerdata_checkbox">
+                            {{-- <input type="checkbox" name="player_related" id = "playerdata_checkbox">
                             <label>Player Related</label>
                             @error('player_related')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                            @enderror --}}
                         </div> 
                     </div>
                     <div class="modal-footer">

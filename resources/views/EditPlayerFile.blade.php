@@ -30,7 +30,7 @@
                             @enderror
                         <br>
                         <label>Type:</label>
-                        <input id="filetype" name = "type" type="text" class="form-control @error('type') is-invalid @enderror" value = "{{ old('type') ?? $playerfile->type }}" autocomplete="off" autofocus>
+                        <input id="filetype" name = "type" type="text" class="form-control @error('type') is-invalid @enderror" value = "{{ old('type') }}" placeholder="{{ $playerfile->type }}" autocomplete="off" autofocus>
                         @error('type')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

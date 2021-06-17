@@ -160,9 +160,19 @@ class GameDataController extends Controller
         
         if (!Schema::hasColumn($GameDataTable, $data['new_column'])){
 
-            Schema::table($GameDataTable, function($table) {
-                $table->string(strtolower(str_replace(' ','_',request('new_column'))))->nullable()->unique();
-            });
+            if (Schema::hasColumn(''.$GameDataTable.'', 'players_id')){
+
+                Schema::table($GameDataTable, function($table) {
+                    $table->string(strtolower(str_replace(' ','_',request('new_column'))))->required();
+                });
+
+            } else {
+
+                Schema::table($GameDataTable, function($table) {
+                    $table->string(strtolower(str_replace(' ','_',request('new_column'))))->nullable()->unique();
+                });
+
+            }
 
         }
 
@@ -228,16 +238,17 @@ class GameDataController extends Controller
 
             $validationArray = [ 
                 'data_file' => ['required','mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg'],
-                'players_id' => ['required','unique:'.$GameDataTable.',players_id',
-                    Rule::exists('players','id')->where(function ($query) {
-                        return $query->where('games_id', request()->route('gameID'));
-                    }),
-                ],
+                // 'players_id' => ['required','unique:'.$GameDataTable.',players_id',
+                //     Rule::exists('players','id')->where(function ($query) {
+                //         return $query->where('games_id', request()->route('gameID'));
+                //     }),
+                // ],
+                'players_id' => ['required'],
             ];
 
             foreach($special_columns as $special_columns)
             {
-                $validationArray[$special_columns] = ['required','unique:'.$GameDataTable.','.$special_columns.''];
+                $validationArray[$special_columns] = ['required','unique:'.$GameDataTable.','.$special_columns.',NULL,id,players_id,'.request('players_id').''];
             }
                 
             $data = $this->validate(request(), $validationArray);
@@ -424,7 +435,10 @@ class GameDataController extends Controller
 
             foreach($special_columns as $special_columns)
             {
-                $validationArray[$special_columns] = ['unique:'.$GameDataTable.','.$special_columns.','.$dataID.',id'];
+                $validationArray[$special_columns] = [
+                    Rule::unique(''.$GameDataTable.'',''.$special_columns.'')->where(function ($query) use ($special_columns) {
+                        return $query->where(''.$special_columns.'','!=', null)->where('id','!=',request()->route('dataID'))->where('players_id',request('players_id'));
+                    }), ];
             }
                 
             $data = $this->validate(request(), $validationArray);
@@ -469,6 +483,8 @@ class GameDataController extends Controller
                 ];
     
                 $updatedata = array_merge($inputWithOutFile, $updatepath);
+
+                unlink($Data->file);
                 
                 $Data->update($updatedata);
     

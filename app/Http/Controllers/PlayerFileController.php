@@ -482,6 +482,8 @@ class PlayerFileController extends Controller
                 
                 $updatedata = array_merge($inputWithOutFile, $updatepath);
 
+                unlink($playerfile->file);
+
                 $playerfile->update($updatedata);
 
             } else {

@@ -415,6 +415,8 @@ class GameDataFileController extends Controller
                 
                 $updatedata = array_merge($inputWithOutFile, $updatepath);
 
+                unlink($gameDataFile->file);
+
                 $gameDataFile->update($updatedata);
 
             } else {
