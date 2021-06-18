@@ -105,25 +105,23 @@ class GameDataController extends Controller
 
         $gameDataTable = strtolower(str_replace(' ','_',$game->game_name).'_'.str_replace(' ','_',$gameDataType->data_name));
 
-        $allcolumns = Schema::getColumnListing($gameDataTable);
+        $allcolumns = DB::getSchemaBuilder()->getColumnListing($gameDataTable);
 
         if (in_array("players_id", $allcolumns)){
 
-            $exclude_columns = ['file','players_id', 'data_id', 'created_at', 'updated_at'];
+            $exclude_columns = ['id', 'file','players_id', 'data_id', 'created_at', 'updated_at'];
 
             $exclude_columns2 = ['id', 'file', 'players_id', 'data_id', 'created_at', 'updated_at'];
 
         } else {
 
-            $exclude_columns = ['file', 'data_id', 'created_at', 'updated_at'];
+            $exclude_columns = ['id', 'file', 'data_id', 'created_at', 'updated_at'];
 
             $exclude_columns2 = ['id', 'file', 'data_id', 'created_at', 'updated_at'];
 
         }
 
         $columns = array_diff($allcolumns, $exclude_columns); 
-
-        dd($columns);
 
         $special_columns = array_diff($allcolumns, $exclude_columns2);
     
