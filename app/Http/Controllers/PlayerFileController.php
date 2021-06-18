@@ -441,6 +441,8 @@ class PlayerFileController extends Controller
 
         $game = Game::find($gameID);
 
+        dd($game);
+
         $GameModelName = str_replace(' ', '',$game->game_name);
 
         $GameModel = "App\\Models\\".$GameModelName;
@@ -461,8 +463,6 @@ class PlayerFileController extends Controller
         ]);
 
         $input = collect($data)->filter()->all();
-
-        dd($input);
 
         if(!empty($input)){
             
