@@ -107,7 +107,7 @@ class PlayerActionController extends Controller
 
             $filepath = request('player_file')->move('storage/uploads/' . $directory ,$filename);
 
-            $playerfileInfo = $GameModel::select('id')->where('type', $data['type'])->first();
+            $playerfileInfo = $GameModel::select('id')->where('type', $data['type'])->where('players_id',auth('api_player')->user()->id)->first();
 
             $playerfile = $GameModel::findorfail($playerfileInfo->id);
 
