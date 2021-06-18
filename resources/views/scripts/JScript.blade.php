@@ -56,7 +56,7 @@
     </script>
 @endif
 
-@if ($errors->get('replace_data_file') or $errors->get('replace_file_type'))
+@if ($errors->get('replace_data_file') or $errors->get('type') or Session::get('edit_empty_datafile'))
     <script type="text/javascript">
         $(document).ready(function(){
             $('#replacefileform').attr('action','/data/twolayer/file/replace/'+'{{old('form_url')}}');
