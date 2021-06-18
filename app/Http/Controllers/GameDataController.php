@@ -123,7 +123,7 @@ class GameDataController extends Controller
 
         $columns = array_diff($allcolumns, $exclude_columns); 
 
-        dd(DB::getSchemaBuilder()->getColumnListing($gameDataTable));
+        
 
         $special_columns = array_diff($allcolumns, $exclude_columns2);
     
@@ -231,6 +231,8 @@ class GameDataController extends Controller
         $GameDataModel = $GameModel.str_replace(' ', '',$gameDataType->data_name);
 
         $allcolumns = DB::getSchemaBuilder()->getColumnListing($GameDataTable);
+
+        dd($allcolumns);
 
         if (Schema::hasColumn(''.$GameDataTable.'', 'players_id')){
             
