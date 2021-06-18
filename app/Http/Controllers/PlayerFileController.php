@@ -447,8 +447,6 @@ class PlayerFileController extends Controller
 
         $GameTable = lcfirst(str_replace(' ','_',$game->game_name));
 
-        dd($fileID);
-
         $playerfile = $GameModel::findorfail($fileID);
 
         $playerid = $playerfile->players_id;
