@@ -460,6 +460,8 @@ class PlayerFileController extends Controller
             'type' => ['unique:'.$GameTable.',type,'.$fileID.',id,players_id,'.$playerid], 
         ]);
 
+        dd($data);
+
         $input = collect($data)->filter()->all();
 
         if(!empty($input)){
