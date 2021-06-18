@@ -449,11 +449,11 @@ class PlayerFileController extends Controller
 
         $playerfile = $GameModel::findorfail($fileID);
 
-        dd($playerfile);
-
         $playerid = $playerfile->players_id;
         
         $players = $playerfile->player;
+
+        dd($players);
 
         $gamefile = $game->game_name;
 
