@@ -236,11 +236,7 @@ class PlayerActionController extends Controller
             'type' => ['required', 'exists:'.$GameTable.',type'],
         ]);
 
-        $playerfile = $GameModel::select('file')->where([
-
-            ['type', $data['type']],
-
-        ])->inRandomOrder()->first();
+        $playerfile = $GameModel::select('file')->where('type', $data['type'])->where('players_id','!=',auth('api_player')->user()->id)->inRandomOrder()->first();
      
         $file = public_path($playerfile->file);
 
