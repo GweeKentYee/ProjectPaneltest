@@ -36,7 +36,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data = $request->validate([
             'player_file' => ['required', 'mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg'],
@@ -71,7 +71,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         if (!$GameModel::where('type', $request['type'])->where('players_id', $player->id)->exists()){
 
@@ -141,7 +141,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data = $request->validate([
             'type' => ['required', 'exists:'.$GameTable.',type'],
@@ -189,7 +189,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data2 = $request->validate([
             'type' => ['required', 
@@ -230,7 +230,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data = $request->validate([
             'type' => ['required', 'exists:'.$GameTable.',type'],
@@ -272,7 +272,7 @@ class PlayerActionController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ', '_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ', '_',$game->game_name));
 
         $data = $request->validate([
             'type' => ['required', 'exists:'.$GameTable.',type'],
