@@ -441,13 +441,13 @@ class PlayerFileController extends Controller
 
         $game = Game::find($gameID);
 
-        dd($game);
-
         $GameModelName = str_replace(' ', '',$game->game_name);
 
         $GameModel = "App\\Models\\".$GameModelName;
 
         $GameTable = lcfirst(str_replace(' ','_',$game->game_name));
+
+        dd($fileID);
 
         $playerfile = $GameModel::findorfail($fileID);
 
