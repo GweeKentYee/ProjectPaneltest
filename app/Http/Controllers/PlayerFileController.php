@@ -445,7 +445,7 @@ class PlayerFileController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $GameTable = lcfirst(str_replace(' ','_',$game->game_name));
+        $GameTable = strtolower(str_replace(' ','_',$game->game_name));
 
         $playerfile = $GameModel::findorfail($fileID);
 
@@ -457,12 +457,10 @@ class PlayerFileController extends Controller
 
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg'],
-            
+            'type' => ['unique:'.$GameTable.',type,'.$fileID.',id,players_id,'.$playerid.''], 
         ]);
 
         $input = collect($data)->filter()->all();
-
-        dd($input);
 
         if(!empty($input)){
             
