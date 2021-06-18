@@ -462,6 +462,8 @@ class PlayerFileController extends Controller
 
         $input = collect($data)->filter()->all();
 
+        dd($input);
+
         if(!empty($input)){
             
             if(request('json/txt')){
