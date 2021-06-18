@@ -319,7 +319,7 @@ class DatatableController extends Controller
         ->addColumn('Action', function($query){
             
             //<a class = "btn btn-success btn-sm edit" href = "/playerfile/edit/'.$query->player_id.'">Edit</a>
-            $actionBtn = '<a href = "/data/twolayer/file/download/' .$query->file. '" class = "download btn btn-primary btn-sm">Download</a>
+            $actionBtn = '<a href = "/data/twolayer/file/download/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.$query->id. '" class = "download btn btn-primary btn-sm">Download</a>
                             <a class = "btn btn-success btn-sm edit" data-toggle="modal" data-target="#replacefile" data-type="'.$query->type.'" data-url="'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.request()->route('dataID').'/'.$query->id.'">Replace</a>
                             <a class = "btn btn-danger btn-sm delete" href = "/data/twolayer/file/delete/'.request()->route('gameID').'/'.request()->route('datatypeID').'/'.request()->route('dataID').'/'.$query->id.'">Delete</a>'
                             ;

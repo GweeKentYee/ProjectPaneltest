@@ -53,7 +53,7 @@ Route::get('/data/twolayer/delete/{gameID}/{datatypeID}/{dataID}', 'App\Http\Con
 Route::get('/data/twolayer/file/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataFileController@display');
 Route::post('/data/twolayer/file/add/{gameID}/{datatypeID}/{dataID}', 'App\Http\Controllers\GameDataFileController@TwoLayerAddFile');
 Route::get('/data/twolayer/file/view/{gameID}/{datatypeID}/{dataID}/{fileID}', 'App\Http\Controllers\GameDataFileController@TwoLayerViewFile');
-Route::get('/data/twolayer/file/download/{file1}/{file2}/{file3}/{file4}/{file5}/{file6}/{file7}', 'App\Http\Controllers\GameDataFileController@TwoLayerDownload');
+Route::get('/data/twolayer/file/download/{gameID}/{datatypeID}/{fileID}', 'App\Http\Controllers\GameDataFileController@TwoLayerDownload');
 Route::patch('/data/twolayer/file/replace/{gameID}/{datatypeID}/{dataID}/{fileID}', 'App\Http\Controllers\GameDataFileController@TwoLayerReplaceFile');
 Route::get('/data/twolayer/file/delete/{gameID}/{datatypeID}/{dataID}/{fileID}', 'App\Http\Controllers\GameDataFileController@TwoLayerDeleteFile');
 

@@ -308,9 +308,23 @@ class GameDataFileController extends Controller
         
     }
 
-    public function TwoLayerDownload($file1,$file2,$file3,$file4,$file5,$file6,$file7)
+    public function TwoLayerDownload($gameID, $datatypeID, $fileID)
     {
-        $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5 .'/'. $file6 .'/'. $file7);
+        $game = Game::find($gameID);
+
+        $gameDataType = GameDataType::findorfail($datatypeID);
+
+        $GameModelName = str_replace(' ', '',$game->game_name);
+
+        $GameModel = "App\\Models\\".$GameModelName;
+
+        $GameDataFileModel = $GameModel.str_replace(' ', '',$gameDataType->data_name)."File";
+
+        $gameDataFile = $GameDataFileModel::findorfail($fileID);
+
+        $path = public_path($gameDataFile->file);
+
+        // $path = public_path($file1 .'/'. $file2 .'/'. $file3 .'/'. $file4 .'/'. $file5 .'/'. $file6 .'/'. $file7);
         
         return response()->download($path);
     }
