@@ -142,6 +142,8 @@ class GameDataTypeController extends Controller
 
                 $GameDataTable = strtolower(str_replace(' ','_',$game->game_name).'_'.str_replace(' ','_',$data['data_name']));
 
+                dd($GameDataTable);
+
                 if (!Schema::hasTable($GameDataTable)) {
                     Schema::create($GameDataTable, function (Blueprint $table) {
 
