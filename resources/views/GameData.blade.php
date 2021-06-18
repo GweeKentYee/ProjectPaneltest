@@ -16,6 +16,7 @@
             <table class = "table" id = "datatable">
                 <thead>
                     <tr>
+                        <th>id</th>
                         @foreach ($columns as $columns )
                             <th>{{ $columns }}</th>
                         @endforeach
@@ -228,37 +229,37 @@
 
         function getDT() {
             
-        //     $.ajax({
-        //         url: "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
-        //         success: function (data) {
-        //             data = JSON.parse(JSON.stringify(data))
-        //             if (data.data[0] != undefined){
-        //                 columnNames = Object.keys(data.data[0]);
-        //                 var columnNames2 = $(columnNames).not(['file','players_id']).get();
-        //                 for (var i in columnNames2) {
-        //                 columns.push({data: columnNames2[i], 
-        //                             title: columnNames2[i]});
-        //                 }
-        //                 $('#datatable').DataTable( {
-        //                     processing: true,
-        //                     serverSide: true,
-        //                     ajax: "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
-        //                     columns: columns
-        //                 } );
-        //             } else {
-        //                 $('#datatable').DataTable({
-        //                     "processing": true,
-        //                     "serverSide": true,
-        //                     "ajax": "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
-        //                 });
-        //             }
-        //         }
-        //     });
-        // }
+            $.ajax({
+                url: "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
+                success: function (data) {
+                    data = JSON.parse(JSON.stringify(data))
+                    if (data.data[0] != undefined){
+                        columnNames = Object.keys(data.data[0]);
+                        var columnNames2 = $(columnNames).not(['file','players_id']).get();
+                        for (var i in columnNames2) {
+                        columns.push({data: columnNames2[i], 
+                                    title: columnNames2[i]});
+                        }
+                        $('#datatable').DataTable( {
+                            processing: true,
+                            serverSide: true,
+                            ajax: "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
+                            columns: columns
+                        } );
+                    } else {
+                        $('#datatable').DataTable({
+                            "processing": true,
+                            "serverSide": true,
+                            "ajax": "{{ route('api.gameData', [$games->id, $gamedatatype->id])}}",
+                        });
+                    }
+                }
+            });
+        }
 
-        // function capitalizeFirstLetter(string) {
-        //     return string.charAt(0).toUpperCase() + string.slice(1);
-        // }
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
 
         $(document).ready(function() {
         
