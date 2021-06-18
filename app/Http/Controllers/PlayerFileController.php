@@ -453,13 +453,11 @@ class PlayerFileController extends Controller
         
         $players = $playerfile->player;
 
-        dd($players);
-
         $gamefile = $game->game_name;
 
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg'],
-            'type' => ['unique:'.$GameTable.',type,'.$fileID.',id,players_id,' .$playerid], 
+            'type' => ['unique:'.$GameTable.',type,'.$fileID.',id,players_id,'.$playerid], 
         ]);
 
         $input = collect($data)->filter()->all();
