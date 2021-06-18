@@ -123,7 +123,7 @@ class GameDataController extends Controller
 
         $columns = array_diff($allcolumns, $exclude_columns); 
 
-        dd($columns);
+        dd($allcolumns);
 
         $special_columns = array_diff($allcolumns, $exclude_columns2);
     
