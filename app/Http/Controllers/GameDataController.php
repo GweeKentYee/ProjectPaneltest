@@ -105,7 +105,7 @@ class GameDataController extends Controller
 
         $gameDataTable = strtolower(str_replace(' ','_',$game->game_name).'_'.str_replace(' ','_',$gameDataType->data_name));
 
-        $allcolumns = DB::getSchemaBuilder()->getColumnListing($gameDataTable);
+        $allcolumns = Schema::getColumnListing($gameDataTable);
 
         if (in_array("players_id", $allcolumns)){
 
