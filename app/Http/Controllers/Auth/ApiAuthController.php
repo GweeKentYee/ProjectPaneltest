@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ApiAuthController extends Controller
 {
@@ -87,9 +88,9 @@ class ApiAuthController extends Controller
     public function playerRegister(Request $request){
 
         $data = request()->validate([
+            'game_id' => ['required','exists:games,id'],  
             'player_name' => ['required', 'alpha_dash', 'unique:players,player_name,NULL,id,games_id,'.$request['game_id']],
-            'password' => ['required', 'alpha_dash', 'string', 'min:8'],
-            'game_id' => ['required','exists:games,id']   
+            'password' => ['required', 'alpha_dash', 'string', 'min:8']       
         ]);
 
         return player::create([
@@ -103,9 +104,12 @@ class ApiAuthController extends Controller
     public function playerLogin (Request $request) {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required', 'alpha_dash', 'string', 'max:255',
-            'password' => 'required', 'alpha_dash', 'string', 'min:6',
-            'game_id' => 'required','exists:games,id'   
+            'game_id' => ['required','exists:games,id'],
+            'player_name' => ['required',
+            Rule::exists('players','player_name')->where(function ($query) {
+                return $query->where('games_id', request('game_id'));
+            }),],
+            'password' => ['required', 'alpha_dash', 'string', 'min:8']
         ]);
 
         if ($validator->fails())
