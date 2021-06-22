@@ -105,7 +105,7 @@ class ApiAuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'game_id' => ['required','exists:games,id'],
-            'player_name' => ['required',
+            'username' => ['required',
             Rule::exists('players','player_name')->where(function ($query) {
                 return $query->where('games_id', request('game_id'));
             }),],
