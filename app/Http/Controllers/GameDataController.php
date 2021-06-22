@@ -16,6 +16,13 @@ use function PHPUnit\Framework\isEmpty;
 
 class GameDataController extends Controller
 {
+    public function __construct()
+    {
+        //Prevent access without authentication
+
+        $this->middleware('auth');
+
+    }
     
     public function index()
     {
