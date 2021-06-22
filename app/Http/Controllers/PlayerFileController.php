@@ -351,11 +351,13 @@ class PlayerFileController extends Controller
         $data = request()->validate([
             'json/txt' => ['mimetypes:application/json,application/xml,text/xml,text/plain,image/png,image/jpeg', 'required'],
             'file_type' => ['required','unique:'.$GameTable.',type,NULL,id,players_id,'.$playerID],
+            'permission' => ['required', Rule::notIn(['0'])],
         ]);
 
         $playername = $players->player_name;
 
         $directory = $gamefile . '/Player/' . $playername;
+        
         $filename = request()->file('json/txt')->getClientOriginalName();
 
         $filepath = request('json/txt')->move('storage/uploads/' . $directory ,$filename);
@@ -363,6 +365,7 @@ class PlayerFileController extends Controller
         $GameModel::create([
             'file' => str_replace('\\','/',$filepath),
             'type' => request('file_type'),
+            'permission' => $data['permission'],
             'players_id' => $playerID
         ]);
 

@@ -123,7 +123,7 @@ class DatatableController extends Controller
 
         $GameModel = "App\\Models\\".$GameModelName;
 
-        $query = $GameModel::select('file', 'type', 'id', 'players_id')->where('players_id', $playerID);
+        $query = $GameModel::select('file', 'type', 'id', 'players_id', 'permission')->where('players_id', $playerID);
         return datatables($query)
         ->addIndexColumn()
         ->addColumn('File', function($query){

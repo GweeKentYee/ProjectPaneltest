@@ -275,6 +275,7 @@ class GamesController extends Controller
                 $table->id();
                 $table->string('file')->required();
                 $table->string('type')->required();
+                $table->string('permission')->required();
                 $table->unsignedBigInteger('players_id')->required();
                 $table->timestamps();
 

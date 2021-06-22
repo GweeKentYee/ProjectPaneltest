@@ -15,6 +15,7 @@
                         <th>File ID</th>
                         <th>File</th>
                         <th>Type</th>
+                        <th>Permission</th>
                         {{-- <th>Api</th> --}}
                         <th>Action</th>
                     </tr>
@@ -55,6 +56,18 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                 @enderror
+                                <br>
+                                <label>Permission:</label>
+                                <select id="filepermission" name = "permission" class = "form-control @error('permission') is-invalid @enderror"> 
+                                    <option value="0" disabled selected>-- Please Select Permission --</option>  
+                                    <option value="private">Private</option>
+                                    <option value="global">Global</option> 
+                                </select>  
+                                    @error('permission')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                             
                         </div>
                     </div>
@@ -121,6 +134,7 @@
                     {"data": "id"},
                     {"data": "File"},
                     {"data": "type"},
+                    {"data": "permission"},
                     // {"data": "Api", orderable: false, searchable: false},
                     {"data": "Action", orderable: false, searchable: false}
                 ]
